@@ -3,8 +3,16 @@
         "time": {
             "year": 2023,
             "month": 5,
+            "day": 2
+        },
+        "value": 359
+    },
+    {
+        "time": {
+            "year": 2023,
+            "month": 5,
             "day": 3
         },
-        "value": 350
+        "value": 361
     }
 ]
