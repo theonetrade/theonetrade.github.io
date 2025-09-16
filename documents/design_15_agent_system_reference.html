@@ -1,0 +1,217 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/15_agent_system_reference | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_15_agent_system_reference.html">design/15_agent_system_reference</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="agent-system-reference" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Agent System Reference<a href="#agent-system-reference" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document provides comprehensive technical documentation for the agent swarm system within the Signal trading platform. The agent system consists of specialized AI consultants that provide cryptocurrency trading analysis and recommendations through a coordinated multi-agent architecture.</p>
+<p>For information about the core AI trading engine components (SignalOutline, CloseOutline, RiskOutline), see <a href="design_03_ai_trading_engine.html">AI Trading Engine</a>. For configuration of agent behavior and AI model selection, see <a href="design_12_environment_configuration.html">Environment Configuration</a>.</p>
+<a id="system-overview" class="tsd-anchor"></a><h2 class="tsd-anchor-link">System Overview<a href="#system-overview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The agent swarm system implements a triage-based routing architecture where user queries are distributed to specialized cryptocurrency consultant agents. Each agent operates with dedicated analysis tools and maintains expertise in specific digital assets while sharing common infrastructure for market data access and AI inference.</p>
+<p><img src="../media/15_Agent_System_Reference_0.svg" alt="Mermaid Diagram"></p>
+<a id="agent-architecture-and-code-mapping" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Agent Architecture and Code Mapping<a href="#agent-architecture-and-code-mapping" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>All agents in the system share a common architectural foundation while maintaining specialized functionality. The following diagram maps the natural language agent descriptions to their actual code entities and configuration structures.</p>
+<p><img src="../media/15_Agent_System_Reference_1.svg" alt="Mermaid Diagram"></p>
+<a id="common-agent-properties" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Common Agent Properties<a href="#common-agent-properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>All agents share the following architectural characteristics:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Completion Engine</strong></td>
+<td><code>runner_stream_completion</code></td>
+<td>Streaming AI completion system</td>
+</tr>
+<tr>
+<td><strong>Language Mode</strong></td>
+<td><code>Всегда пиши ответ на русском языке</code></td>
+<td>Russian-language responses</td>
+</tr>
+<tr>
+<td><strong>Reasoning Level</strong></td>
+<td><code>Reasoning: high</code></td>
+<td>High-level analytical reasoning</td>
+</tr>
+<tr>
+<td><strong>Error Handling</strong></td>
+<td><code>onToolError</code> callback</td>
+<td>Standardized error management</td>
+</tr>
+<tr>
+<td><strong>Message Format</strong></td>
+<td>Markdown text only</td>
+<td>No HTML, files, or tables supported</td>
+</tr>
+</tbody>
+</table>
+<a id="tool-system-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Tool System Architecture<a href="#tool-system-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The agent tool system provides standardized interfaces for market data access across different timeframes and analysis types. Each tool category serves specific analytical purposes while maintaining consistent parameter structures.</p>
+<p><img src="../media/15_Agent_System_Reference_2.svg" alt="Mermaid Diagram"></p>
+<a id="tool-categories-and-capabilities" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Tool Categories and Capabilities<a href="#tool-categories-and-capabilities" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Tool Category</th>
+<th>Purpose</th>
+<th>Data Scope</th>
+<th>Update Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Signal Analysis</strong></td>
+<td>Primary technical analysis</td>
+<td>36-48 hour lookback</td>
+<td>Real-time</td>
+</tr>
+<tr>
+<td><strong>Historical Data</strong></td>
+<td>Trend analysis over time</td>
+<td>5-30 stored calculations</td>
+<td>2-5 minutes</td>
+</tr>
+<tr>
+<td><strong>Market Structure</strong></td>
+<td>Liquidity and order flow</td>
+<td>2-220 hour windows</td>
+<td>Real-time</td>
+</tr>
+<tr>
+<td><strong>Social Sentiment</strong></td>
+<td>Community sentiment analysis</td>
+<td>Recent posts</td>
+<td>On-demand</td>
+</tr>
+<tr>
+<td><strong>Raw Candles</strong></td>
+<td>OHLCV price action</td>
+<td>6-15 recent candles</td>
+<td>Real-time</td>
+</tr>
+</tbody>
+</table>
+<a id="agent-interaction-and-navigation-flow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Agent Interaction and Navigation Flow<a href="#agent-interaction-and-navigation-flow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The agent system implements a hub-and-spoke navigation model with the <code>triage_agent</code> serving as the central router. Navigation between agents occurs through dedicated tools that enable seamless conversation handoffs.</p>
+<p><img src="../media/15_Agent_System_Reference_3.svg" alt="Mermaid Diagram"></p>
+<a id="navigation-rules-and-triggers" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Navigation Rules and Triggers<a href="#navigation-rules-and-triggers" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>triage_agent</code> implements keyword-based routing logic to determine appropriate consultant assignment:</p>
+<table>
+<thead>
+<tr>
+<th>Cryptocurrency</th>
+<th>Agent Target</th>
+<th>Trigger Keywords</th>
+<th>Navigation Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bitcoin</strong></td>
+<td><code>btc_consultant_agent</code></td>
+<td>BTC, Bitcoin, Биткоин</td>
+<td><code>navigate_to_btc_consultant_tool</code></td>
+</tr>
+<tr>
+<td><strong>Ethereum</strong></td>
+<td><code>eth_consultant_agent</code></td>
+<td>ETH, Ethereum, Эфириум, Эфир</td>
+<td><code>navigate_to_eth_consultant_tool</code></td>
+</tr>
+<tr>
+<td><strong>Binance Coin</strong></td>
+<td><code>bnb_consultant_agent</code></td>
+<td>BNB, Binance Coin, Binance Smart Chain</td>
+<td><code>navigate_to_bnb_consultant_tool</code></td>
+</tr>
+<tr>
+<td><strong>Ripple</strong></td>
+<td><code>xrp_consultant_agent</code></td>
+<td>XRP, Ripple, Рипл</td>
+<td><code>navigate_to_xrp_consultant_tool</code></td>
+</tr>
+<tr>
+<td><strong>Solana</strong></td>
+<td><code>sol_consultant_agent</code></td>
+<td>SOL, Solana, Солана</td>
+<td><code>navigate_to_sol_consultant_tool</code></td>
+</tr>
+</tbody>
+</table>
+<a id="individual-agent-specifications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Individual Agent Specifications<a href="#individual-agent-specifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="triage-agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Triage Agent<a href="#triage-agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>triage_agent</code> serves as the central routing hub for the agent swarm system. It analyzes user queries to determine cryptocurrency interest and routes conversations to appropriate specialist agents.</p>
+<p><strong>Core Functionality:</strong></p>
+<ul>
+<li>Conversation topic detection and routing</li>
+<li>Natural language interaction without explicit agent switching</li>
+<li>Support for general conversation when topics fall outside cryptocurrency scope</li>
+<li>Seamless handoff to specialist consultants</li>
+</ul>
+<p><strong>System Behavior:</strong></p>
+<ul>
+<li>Responds in Russian language</li>
+<li>Maintains conversational flow without explicit greetings</li>
+<li>Routes immediately upon cryptocurrency mention detection</li>
+<li>Does not attempt extended conversation on off-topic subjects</li>
+</ul>
+<a id="bitcoin-consultant-agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Bitcoin Consultant Agent<a href="#bitcoin-consultant-agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>btc_consultant_agent</code> provides specialized Bitcoin trading analysis and consultation services with comprehensive technical analysis capabilities.</p>
+<p><strong>Market Context:</strong></p>
+<ul>
+<li>Current Bitcoin price tracking: <code>111983.60</code></li>
+<li>Date/time awareness: <code>08/09/2025 17:14 +05:00</code></li>
+<li>Specialized Bitcoin analysis tools and indicators</li>
+</ul>
+<p><strong>Tool Arsenal:</strong></p>
+<ul>
+<li>Complete signal analysis suite (15min, 30min, 1hour, 1min timeframes)</li>
+<li>Historical indicator tracking with 5-30 calculation history</li>
+<li>Social media sentiment analysis (Mastodon, Twitter)</li>
+<li>Advanced market structure analysis (volume, whale detection, order book)</li>
+<li>Real-time candle data across multiple timeframes</li>
+</ul>
+<p><strong>Navigation Behavior:</strong></p>
+<ul>
+<li>Returns to <code>triage_agent</code> when user interest shifts to other cryptocurrencies</li>
+<li>Seamless conversation continuity without explicit handoff announcements</li>
+<li>Immediate tool invocation based on user query requirements</li>
+</ul>
+<a id="ethereum-consultant-agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Ethereum Consultant Agent<a href="#ethereum-consultant-agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>eth_consultant_agent</code> provides specialized Ethereum trading analysis with identical tool capabilities tailored for ETH market analysis.</p>
+<p><strong>Market Context:</strong></p>
+<ul>
+<li>Current Ethereum price tracking: <code>4307.81</code></li>
+<li>Complete technical analysis coverage for Ethereum markets</li>
+<li>Ethereum-specific social sentiment monitoring</li>
+</ul>
+<p><strong>Specialized Features:</strong></p>
+<ul>
+<li>Same comprehensive tool suite as Bitcoin consultant but Ethereum-focused</li>
+<li>Ethereum market pattern recognition and analysis</li>
+<li>ETH-specific whale activity detection and institutional flow analysis</li>
+</ul>
+<a id="binance-coin-consultant-agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Binance Coin Consultant Agent<a href="#binance-coin-consultant-agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>bnb_consultant_agent</code> specializes in Binance Coin (BNB) trading analysis and Binance Smart Chain ecosystem consultation.</p>
+<p><strong>Market Context:</strong></p>
+<ul>
+<li>Current BNB price tracking: <code>877.69</code></li>
+<li>Binance Smart Chain ecosystem analysis capabilities</li>
+<li>BNB-specific market structure analysis</li>
+</ul>
+<p><strong>Tool Configuration:</strong></p>
+<ul>
+<li>Complete technical analysis suite for BNB markets</li>
+<li>Binance ecosystem-specific insights and analysis</li>
+<li>BSC network activity and token flow analysis capabilities</li>
+</ul>
+<a id="solana-consultant-agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Solana Consultant Agent<a href="#solana-consultant-agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>sol_consultant_agent</code> provides specialized Solana (SOL) trading analysis and ecosystem consultation services.</p>
+<p><strong>Market Context:</strong></p>
+<ul>
+<li>Current SOL price tracking: <code>214.08</code></li>
+<li>Solana ecosystem analysis and market intelligence</li>
+<li>SOL-specific technical analysis and pattern recognition</li>
+</ul>
+<p><strong>Analysis Capabilities:</strong></p>
+<ul>
+<li>Complete signal analysis across all timeframes for Solana</li>
+<li>Solana network activity and validator performance insights</li>
+<li>SOL market microstructure and liquidity analysis</li>
+</ul>
+<a id="agent-system-integration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent System Integration<a href="#agent-system-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>All consultant agents maintain consistent behavioral patterns:</p>
+<ol>
+<li><strong>Language Consistency</strong>: All responses in Russian language</li>
+<li><strong>Tool Efficiency</strong>: Tools invoked only when required by user queries</li>
+<li><strong>Navigation Transparency</strong>: Agent switching occurs without user notification</li>
+<li><strong>Content Restrictions</strong>: Text-only markdown responses, no file generation</li>
+<li><strong>Price Integration</strong>: Current price inclusion when making predictions</li>
+<li><strong>Social Sentiment</strong>: Link inclusion and sentiment classification for social media queries</li>
+</ol>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#agent-system-reference"><span>Agent <wbr/>System <wbr/>Reference</span></a><ul><li><a href="#system-overview"><span>System <wbr/>Overview</span></a></li><li><a href="#agent-architecture-and-code-mapping"><span>Agent <wbr/>Architecture and <wbr/>Code <wbr/>Mapping</span></a></li><li><ul><li><a href="#common-agent-properties"><span>Common <wbr/>Agent <wbr/>Properties</span></a></li></ul></li><li><a href="#tool-system-architecture"><span>Tool <wbr/>System <wbr/>Architecture</span></a></li><li><ul><li><a href="#tool-categories-and-capabilities"><span>Tool <wbr/>Categories and <wbr/>Capabilities</span></a></li></ul></li><li><a href="#agent-interaction-and-navigation-flow"><span>Agent <wbr/>Interaction and <wbr/>Navigation <wbr/>Flow</span></a></li><li><ul><li><a href="#navigation-rules-and-triggers"><span>Navigation <wbr/>Rules and <wbr/>Triggers</span></a></li></ul></li><li><a href="#individual-agent-specifications"><span>Individual <wbr/>Agent <wbr/>Specifications</span></a></li><li><ul><li><a href="#triage-agent"><span>Triage <wbr/>Agent</span></a></li><li><a href="#bitcoin-consultant-agent"><span>Bitcoin <wbr/>Consultant <wbr/>Agent</span></a></li><li><a href="#ethereum-consultant-agent"><span>Ethereum <wbr/>Consultant <wbr/>Agent</span></a></li><li><a href="#binance-coin-consultant-agent"><span>Binance <wbr/>Coin <wbr/>Consultant <wbr/>Agent</span></a></li><li><a href="#solana-consultant-agent"><span>Solana <wbr/>Consultant <wbr/>Agent</span></a></li><li><a href="#agent-system-integration"><span>Agent <wbr/>System <wbr/>Integration</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

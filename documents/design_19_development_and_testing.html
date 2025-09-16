@@ -1,0 +1,83 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/19_development_and_testing | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_19_development_and_testing.html">design/19_development_and_testing</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="development-and-testing" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Development and Testing<a href="#development-and-testing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers development practices, testing methodologies, and backtesting capabilities for the Signal trading system. It provides guidance for developers working on system enhancements and performance analysis.</p>
+<p>For information about the core trading pipeline implementation, see <a href="#3">Trading Components</a>. For details about specific agent implementations, see <a href="#5">Agent System Reference</a>.</p>
+<a id="development-workflow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Development Workflow<a href="#development-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Signal system uses a modern TypeScript-based development stack with Bun as the primary runtime and build tool. The development process emphasizes rapid iteration and comprehensive testing of trading strategies.</p>
+<a id="build-system-architecture" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Build System Architecture<a href="#build-system-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/19_Development_and_Testing_0.svg" alt="Mermaid Diagram"></p>
+<p><strong>Development Build Pipeline</strong></p>
+<a id="testing-strategy" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Testing Strategy<a href="#testing-strategy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system employs multiple testing approaches to ensure trading algorithm reliability:</p>
+<table>
+<thead>
+<tr>
+<th>Testing Type</th>
+<th>Purpose</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backtesting</td>
+<td>Historical performance validation</td>
+<td><code>BACKTEST.md</code> analysis reports</td>
+</tr>
+<tr>
+<td>Unit Testing</td>
+<td>Component-level verification</td>
+<td>TypeScript test suites</td>
+</tr>
+<tr>
+<td>Integration Testing</td>
+<td>End-to-end workflow validation</td>
+<td>AI agent response testing</td>
+</tr>
+<tr>
+<td>Performance Testing</td>
+<td>System load and response time</td>
+<td>Real-time trading simulation</td>
+</tr>
+</tbody>
+</table>
+<a id="development-environment-setup" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Development Environment Setup<a href="#development-environment-setup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p><img src="../media/19_Development_and_Testing_1.svg" alt="Mermaid Diagram"></p>
+<p><strong>Development Environment Components</strong></p>
+<a id="code-quality-standards" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Code Quality Standards<a href="#code-quality-standards" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The codebase follows strict TypeScript standards with emphasis on:</p>
+<ul>
+<li><strong>Type Safety</strong>: Full TypeScript implementation across all services</li>
+<li><strong>Modular Architecture</strong>: Service-oriented design with clear separation of concerns</li>
+<li><strong>Error Handling</strong>: Comprehensive error logging and recovery mechanisms</li>
+<li><strong>Performance Monitoring</strong>: Real-time metrics collection and analysis</li>
+</ul>
+<a id="key-development-files" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Key Development Files<a href="#key-development-files" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>File Pattern</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI Services</td>
+<td><code>services/*Service.js</code></td>
+<td>Core mathematical and AI analysis</td>
+</tr>
+<tr>
+<td>Agent System</td>
+<td><code>agents/*Agent.js</code></td>
+<td>Specialized cryptocurrency consultants</td>
+</tr>
+<tr>
+<td>Trading Engine</td>
+<td><code>outline/*.js</code></td>
+<td>Signal generation and position management</td>
+</tr>
+<tr>
+<td>Frontend Apps</td>
+<td><code>apps/*/</code></td>
+<td>React-based user interfaces</td>
+</tr>
+</tbody>
+</table>
+<a id="debugging-and-monitoring" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Debugging and Monitoring<a href="#debugging-and-monitoring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p><img src="../media/19_Development_and_Testing_2.svg" alt="Mermaid Diagram"></p>
+<p><strong>Monitoring and Debugging Pipeline</strong></p>
+<p>The system provides comprehensive logging and monitoring capabilities through PM2 process management and centralized log aggregation. Real-time metrics are stored in Redis for dashboard visualization.</p>
+<hr>
+<p><em>Related sections: <a href="#6.1">Backtesting System</a> provides detailed analysis capabilities, <a href="#6.2">Development Roadmap</a> outlines planned enhancements.</em></p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#development-and-testing"><span>Development and <wbr/>Testing</span></a><ul><li><a href="#development-workflow"><span>Development <wbr/>Workflow</span></a></li><li><ul><li><a href="#build-system-architecture"><span>Build <wbr/>System <wbr/>Architecture</span></a></li><li><a href="#testing-strategy"><span>Testing <wbr/>Strategy</span></a></li></ul></li><li><a href="#development-environment-setup"><span>Development <wbr/>Environment <wbr/>Setup</span></a></li><li><a href="#code-quality-standards"><span>Code <wbr/>Quality <wbr/>Standards</span></a></li><li><ul><li><a href="#key-development-files"><span>Key <wbr/>Development <wbr/>Files</span></a></li></ul></li><li><a href="#debugging-and-monitoring"><span>Debugging and <wbr/>Monitoring</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

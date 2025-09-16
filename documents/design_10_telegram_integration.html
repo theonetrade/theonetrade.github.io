@@ -1,0 +1,105 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/10_telegram_integration | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_10_telegram_integration.html">design/10_telegram_integration</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="telegram-integration" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Telegram Integration<a href="#telegram-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><a id="purpose-and-scope" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Purpose and Scope<a href="#purpose-and-scope" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>This document covers the Telegram notification system that sends formatted messages for various trading events including buy signals, position closures, stop losses, take profits, and monitoring updates. The integration provides real-time notifications to users via Telegram channels using markdown-formatted messages in Russian language.</p>
+<p>For information about the core trading signal generation that triggers these notifications, see <a href="design_07_signal_generation_and_validation.html">Signal Generation and Validation</a>. For details about position management logic that determines when notifications are sent, see <a href="design_08_position_management_and_closing.html">Position Management and Closing</a>.</p>
+<a id="notification-system-overview" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Notification System Overview<a href="#notification-system-overview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Telegram integration operates through a set of specialized markdown generators that format trading event data into user-friendly messages. Each trading event type has a dedicated generator function that creates structured notifications with consistent formatting.</p>
+<p><img src="../media/10_Telegram_Integration_0.svg" alt="Mermaid Diagram"></p>
+<a id="message-type-implementations" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Message Type Implementations<a href="#message-type-implementations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="buy-signal-notifications" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Buy Signal Notifications<a href="#buy-signal-notifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>generateBuyMarkdown</code> function creates notifications when new positions are opened. These messages include comprehensive trade details and risk management parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Symbol</td>
+<td>Trading pair identifier</td>
+<td><code>signal.symbol</code></td>
+</tr>
+<tr>
+<td>Buy Price</td>
+<td>Entry price</td>
+<td>Formatted via <code>binanceService.formatPrice()</code></td>
+</tr>
+<tr>
+<td>Stop Loss</td>
+<td>Risk management level</td>
+<td>Price + percentage difference</td>
+</tr>
+<tr>
+<td>Take Profit</td>
+<td>Target profit level</td>
+<td>Price + percentage difference</td>
+</tr>
+<tr>
+<td>Quantity</td>
+<td>Position size</td>
+<td>Formatted via <code>binanceService.formatQuantity()</code></td>
+</tr>
+<tr>
+<td>Total Investment</td>
+<td>Position value</td>
+<td><code>quantity * buyPrice</code></td>
+</tr>
+<tr>
+<td>Comment</td>
+<td>AI-generated analysis</td>
+<td><code>signal.comment</code></td>
+</tr>
+</tbody>
+</table>
+<a id="position-closure-notifications" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Position Closure Notifications<a href="#position-closure-notifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>generateCloseMarkdown</code> function handles notifications for position closures, differentiating between profitable sales and asset unfreezing based on the close price relative to buy price.</p>
+<p><img src="../media/10_Telegram_Integration_1.svg" alt="Mermaid Diagram"></p>
+<a id="stop-loss-and-take-profit-notifications" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Stop Loss and Take Profit Notifications<a href="#stop-loss-and-take-profit-notifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Both <code>generateStopLossMarkdown</code> and <code>generateTakeProfitMarkdown</code> follow similar patterns but with different messaging context:</p>
+<ul>
+<li><strong>Stop Loss</strong>: Emphasizes asset unfreezing and longer-term holding strategy</li>
+<li><strong>Take Profit</strong>: Celebrates successful trade completion and encourages following the bot</li>
+</ul>
+<a id="monitoring-and-wait-notifications" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Monitoring and Wait Notifications<a href="#monitoring-and-wait-notifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li><code>generateWatchMarkdown</code>: Provides position monitoring updates with current P&amp;L status</li>
+<li><code>generateWaitMarkdown</code>: Informs users when the system is waiting for market signals</li>
+</ul>
+<a id="message-formatting-system" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Message Formatting System<a href="#message-formatting-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="utility-functions-and-dependencies" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Utility Functions and Dependencies<a href="#utility-functions-and-dependencies" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>All markdown generators utilize consistent formatting utilities:</p>
+<p><img src="../media/10_Telegram_Integration_2.svg" alt="Mermaid Diagram"></p>
+<a id="profitloss-calculation-pattern" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Profit/Loss Calculation Pattern<a href="#profitloss-calculation-pattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each generator implements consistent P&amp;L calculations:</p>
+<pre><code class="javascript"><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">totalInvested</span><span class="hl-1"> = </span><span class="hl-0">signal</span><span class="hl-1">.</span><span class="hl-0">quantity</span><span class="hl-1"> * </span><span class="hl-0">signal</span><span class="hl-1">.</span><span class="hl-0">buyPrice</span><span class="hl-1">;</span><br/><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">totalReceived</span><span class="hl-1"> = </span><span class="hl-0">closePrice</span><span class="hl-1"> * </span><span class="hl-0">signal</span><span class="hl-1">.</span><span class="hl-0">quantity</span><span class="hl-1">;</span><br/><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">profitLoss</span><span class="hl-1"> = </span><span class="hl-0">totalReceived</span><span class="hl-1"> - </span><span class="hl-0">totalInvested</span><span class="hl-1">;</span><br/><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">profitLossPercentage</span><span class="hl-1"> = (</span><span class="hl-0">profitLoss</span><span class="hl-1"> / </span><span class="hl-0">totalInvested</span><span class="hl-1">) * </span><span class="hl-4">100</span><span class="hl-1">;</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="bot-integration-and-configuration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Bot Integration and Configuration<a href="#bot-integration-and-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="environment-configuration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Environment Configuration<a href="#environment-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system uses the <code>CC_TELEGRAM_BOT</code> environment variable to append bot reference links to messages:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Purpose</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CC_TELEGRAM_BOT</code></td>
+<td>Bot username</td>
+<td>Generates <code>t.me/{botName}?start</code> links</td>
+</tr>
+</tbody>
+</table>
+<p>When configured, each message includes a call-to-action link formatted as:</p>
+<pre><code><span class="hl-1">**👉 </span><span class="hl-0">Узнать</span><span class="hl-1"> </span><span class="hl-0">подробнее</span><span class="hl-1">**: [@{</span><span class="hl-0">botName</span><span class="hl-1">}](</span><span class="hl-0">https</span><span class="hl-1">:</span><span class="hl-7">//t.me/{botName}?start)</span>
+</code><button>Copy</button></pre>
+
+<a id="message-structure-pattern" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Message Structure Pattern<a href="#message-structure-pattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>All generated messages follow a consistent Russian-language structure:</p>
+<ol>
+<li><strong>Header</strong>: Event type with emoji indicator</li>
+<li><strong>Trading Details</strong>: Symbol, prices, quantities</li>
+<li><strong>Summary Section</strong>: Financial calculations</li>
+<li><strong>Commentary</strong>: AI-generated or predefined explanations</li>
+<li><strong>Bot Reference</strong>: Optional promotional link</li>
+</ol>
+<a id="integration-with-trading-pipeline" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Integration with Trading Pipeline<a href="#integration-with-trading-pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Telegram notification system integrates with the broader trading system through service injection patterns, where each generator receives a <code>self</code> parameter containing:</p>
+<ul>
+<li><code>binanceService</code>: For price and quantity formatting</li>
+<li>Access to signal objects with trading data</li>
+<li>Current market price information for real-time calculations</li>
+</ul>
+<p>This design allows the notification system to format data consistently while remaining decoupled from the core trading logic.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#telegram-integration"><span>Telegram <wbr/>Integration</span></a><ul><li><a href="#purpose-and-scope"><span>Purpose and <wbr/>Scope</span></a></li><li><a href="#notification-system-overview"><span>Notification <wbr/>System <wbr/>Overview</span></a></li><li><a href="#message-type-implementations"><span>Message <wbr/>Type <wbr/>Implementations</span></a></li><li><ul><li><a href="#buy-signal-notifications"><span>Buy <wbr/>Signal <wbr/>Notifications</span></a></li><li><a href="#position-closure-notifications"><span>Position <wbr/>Closure <wbr/>Notifications</span></a></li><li><a href="#stop-loss-and-take-profit-notifications"><span>Stop <wbr/>Loss and <wbr/>Take <wbr/>Profit <wbr/>Notifications</span></a></li><li><a href="#monitoring-and-wait-notifications"><span>Monitoring and <wbr/>Wait <wbr/>Notifications</span></a></li></ul></li><li><a href="#message-formatting-system"><span>Message <wbr/>Formatting <wbr/>System</span></a></li><li><ul><li><a href="#utility-functions-and-dependencies"><span>Utility <wbr/>Functions and <wbr/>Dependencies</span></a></li><li><a href="#profitloss-calculation-pattern"><span>Profit/<wbr/>Loss <wbr/>Calculation <wbr/>Pattern</span></a></li></ul></li><li><a href="#bot-integration-and-configuration"><span>Bot <wbr/>Integration and <wbr/>Configuration</span></a></li><li><ul><li><a href="#environment-configuration"><span>Environment <wbr/>Configuration</span></a></li><li><a href="#message-structure-pattern"><span>Message <wbr/>Structure <wbr/>Pattern</span></a></li></ul></li><li><a href="#integration-with-trading-pipeline"><span>Integration with <wbr/>Trading <wbr/>Pipeline</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

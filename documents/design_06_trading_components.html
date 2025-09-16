@@ -1,0 +1,105 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/06_trading_components | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_06_trading_components.html">design/06_trading_components</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="trading-components" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Trading Components<a href="#trading-components" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the core trading functionality of the Signal trading system, including the three-stage AI decision pipeline, signal generation and validation, position management, risk assessment, and execution components. This page provides an architectural overview of how trading decisions are made and executed.</p>
+<p>For detailed AI agent consultation capabilities, see <a href="#5">Agent System Reference</a>. For configuration and deployment details, see <a href="design_11_configuration_and_deployment.html">Configuration and Deployment</a>. For mathematical analysis specifics, see <a href="design_04_mathematical_analysis_services.html">Mathematical Analysis Services</a>.</p>
+<a id="overview" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Overview<a href="#overview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The trading system employs a sophisticated three-stage AI pipeline that processes market data through specialized services to generate, validate, and execute trading decisions. The architecture consists of AI decision engines, mathematical analysis services, validation layers, and execution components that work together to automate cryptocurrency trading.</p>
+<p>The core components include:</p>
+<ul>
+<li><strong>Signal Generation</strong>: AI-driven market entry analysis using <code>SignalOutline</code></li>
+<li><strong>Position Management</strong>: Intelligent position monitoring and closing via <code>CloseOutline</code></li>
+<li><strong>Risk Assessment</strong>: Market condition evaluation through <code>RiskOutline</code></li>
+<li><strong>Validation Services</strong>: Multi-layer signal and close validation</li>
+<li><strong>Execution Pipeline</strong>: Automated order execution and notification systems</li>
+</ul>
+<a id="three-stage-ai-trading-pipeline" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Three-Stage AI Trading Pipeline<a href="#three-stage-ai-trading-pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="core-decision-flow-diagram" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Core Decision Flow Diagram<a href="#core-decision-flow-diagram" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/06_Trading_Components_0.svg" alt="Mermaid Diagram"></p>
+<p>The pipeline operates with dynamic Time-To-Live (TTL) intervals:</p>
+<ul>
+<li><strong>RiskOutline</strong>: 15-minute intervals for market condition assessment</li>
+<li><strong>SignalOutline</strong>: Dynamic TTL based on market conditions (1.5-5 minutes)</li>
+<li><strong>CloseOutline</strong>: Adaptive TTL based on P&amp;L momentum (1.0-5 minutes)</li>
+</ul>
+<a id="service-architecture-and-component-integration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Service Architecture and Component Integration<a href="#service-architecture-and-component-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="trading-components-architecture-diagram" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Trading Components Architecture Diagram<a href="#trading-components-architecture-diagram" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/06_Trading_Components_1.svg" alt="Mermaid Diagram"></p>
+<p>The architecture employs dependency injection through a container system that binds services and ensures loose coupling between components. The <code>TYPES</code> constant defines service identifiers used throughout the system.</p>
+<a id="component-integration-and-data-flow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Component Integration and Data Flow<a href="#component-integration-and-data-flow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="signal-generation-process" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Signal Generation Process<a href="#signal-generation-process" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The signal generation process begins with <code>RiskAutoService</code> evaluating market conditions every 15 minutes. If conditions are favorable (<code>action: &quot;trade&quot;</code>), <code>SignalAutoService</code> activates with dynamic TTL intervals. The <code>SignalOutline</code> analyzes multi-timeframe data using mathematical services and generates trading recommendations.</p>
+<p>Key validation steps include:</p>
+<ul>
+<li><strong>Signal strength validation</strong>: Ensures minimum TP/SL thresholds via <code>SignalValidationService</code></li>
+<li><strong>Overlap protection</strong>: Prevents conflicting positions in same price range</li>
+<li><strong>Feature flag control</strong>: Granular behavior modification through <code>SettingsConnectionService</code></li>
+</ul>
+<a id="position-management-workflow" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Position Management Workflow<a href="#position-management-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Once a position is opened via <code>SignalCoreService.commitBuySignal()</code>, <code>CloseAutoService</code> begins monitoring with adaptive TTL intervals based on P&amp;L momentum:</p>
+<ul>
+<li><strong>PROFIT_RISING_TTL</strong>: 2.5 minutes (profit growing)</li>
+<li><strong>PROFIT_FALLING_TTL</strong>: 1.0 minutes (profit declining - fast check)</li>
+<li><strong>LOSS_RISING_TTL</strong>: 5 minutes (loss shrinking - slow check)</li>
+<li><strong>LOSS_FALLING_TTL</strong>: 5 minutes (loss growing - slow check)</li>
+</ul>
+<p>The <code>CloseOutline</code> specializes in scalping-oriented early closure on reversal signals, particularly in bearish market conditions.</p>
+<a id="mathematical-analysis-integration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Mathematical Analysis Integration<a href="#mathematical-analysis-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Six specialized mathematical services provide comprehensive technical analysis:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Timeframe</th>
+<th>Specialization</th>
+<th>Data Window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ShortTermMathService</code></td>
+<td>15-minute</td>
+<td>Scalping</td>
+<td>144 candles (36 hours)</td>
+</tr>
+<tr>
+<td><code>SwingTermMathService</code></td>
+<td>30-minute</td>
+<td>Swing trading</td>
+<td>96 candles (48 hours)</td>
+</tr>
+<tr>
+<td><code>LongTermMathService</code></td>
+<td>1-hour</td>
+<td>Position trading</td>
+<td>48 candles (48 hours)</td>
+</tr>
+<tr>
+<td><code>VolumeDataMathService</code></td>
+<td>Variable</td>
+<td>Support/Resistance</td>
+<td>220/96 hourly candles</td>
+</tr>
+<tr>
+<td><code>SlopeDataMathService</code></td>
+<td>1-minute</td>
+<td>Momentum analysis</td>
+<td>120 candles (2 hours)</td>
+</tr>
+<tr>
+<td><code>WhaleDetectionMathService</code></td>
+<td>5-minute</td>
+<td>Institutional activity</td>
+<td>72 candles (6 hours)</td>
+</tr>
+</tbody>
+</table>
+<p>Each service calculates specific technical indicators optimized for its timeframe and trading strategy.</p>
+<a id="configuration-and-feature-control" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configuration and Feature Control<a href="#configuration-and-feature-control" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The system implements sophisticated feature flag architecture with guaranteed consistency between UI controls and backend business logic. Configuration is managed through <code>SettingsConnectionService</code> with Redis-based persistent storage.</p>
+<a id="key-configuration-areas" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Key Configuration Areas<a href="#key-configuration-areas" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ul>
+<li><strong>Signal Strength Control</strong>: 5 levels with corresponding TP/SL thresholds</li>
+<li><strong>AI Behavior Features</strong>: 6 smart filters for risk management</li>
+<li><strong>LLM Selection</strong>: 8 AI model options for decision making</li>
+<li><strong>Telegram Notifications</strong>: Granular control over message types</li>
+</ul>
+<p>The configuration system uses bidirectional transforms between user-friendly UI controls and backend boolean flags, ensuring no configuration conflicts.</p>
+<a id="execution-pipeline-and-notifications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Execution Pipeline and Notifications<a href="#execution-pipeline-and-notifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The execution pipeline integrates with external systems through <code>WebhookService</code> for order execution and <code>TelegramWebService</code> for user notifications. Each trading event triggers specific notification sequences based on feature flag settings.</p>
+<p>The <code>TelegramWebService</code> implements six notification methods corresponding to different trading events:</p>
+<ul>
+<li>Buy signal notifications</li>
+<li>Take profit notifications</li>
+<li>Stop loss notifications</li>
+<li>Close signal notifications</li>
+<li>Wait signal notifications</li>
+<li>Watch (monitoring) notifications</li>
+</ul>
+<p>All notifications include markdown formatting for professional presentation of trading data and P&amp;L information.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#trading-components"><span>Trading <wbr/>Components</span></a><ul><li><a href="#overview"><span>Overview</span></a></li><li><a href="#three-stage-ai-trading-pipeline"><span>Three-<wbr/>Stage AI <wbr/>Trading <wbr/>Pipeline</span></a></li><li><ul><li><a href="#core-decision-flow-diagram"><span>Core <wbr/>Decision <wbr/>Flow <wbr/>Diagram</span></a></li></ul></li><li><a href="#service-architecture-and-component-integration"><span>Service <wbr/>Architecture and <wbr/>Component <wbr/>Integration</span></a></li><li><ul><li><a href="#trading-components-architecture-diagram"><span>Trading <wbr/>Components <wbr/>Architecture <wbr/>Diagram</span></a></li></ul></li><li><a href="#component-integration-and-data-flow"><span>Component <wbr/>Integration and <wbr/>Data <wbr/>Flow</span></a></li><li><ul><li><a href="#signal-generation-process"><span>Signal <wbr/>Generation <wbr/>Process</span></a></li><li><a href="#position-management-workflow"><span>Position <wbr/>Management <wbr/>Workflow</span></a></li><li><a href="#mathematical-analysis-integration"><span>Mathematical <wbr/>Analysis <wbr/>Integration</span></a></li></ul></li><li><a href="#configuration-and-feature-control"><span>Configuration and <wbr/>Feature <wbr/>Control</span></a></li><li><ul><li><a href="#key-configuration-areas"><span>Key <wbr/>Configuration <wbr/>Areas</span></a></li></ul></li><li><a href="#execution-pipeline-and-notifications"><span>Execution <wbr/>Pipeline and <wbr/>Notifications</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

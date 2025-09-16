@@ -1,0 +1,102 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/17_cryptocurrency_consultant_agents | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_17_cryptocurrency_consultant_agents.html">design/17_cryptocurrency_consultant_agents</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="cryptocurrency-consultant-agents" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Cryptocurrency Consultant Agents<a href="#cryptocurrency-consultant-agents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the specialized cryptocurrency consultant agents within the Signal trading system's agent swarm architecture. These agents provide expert analysis and trading consultation for specific cryptocurrencies using comprehensive technical analysis tools and AI inference capabilities.</p>
+<p>For information about the central request routing mechanism, see <a href="#5.1">Triage Agent</a>. For details about the internal market reporting system, see <a href="#5.3">Report Agent</a>.</p>
+<a id="system-purpose-and-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">System Purpose and Architecture<a href="#system-purpose-and-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The cryptocurrency consultant agents form the specialized analysis layer of the agent swarm system. Each agent focuses on a specific cryptocurrency and provides expert consultation by leveraging an extensive toolkit of technical analysis functions, social media monitoring, and real-time market data.</p>
+<p><img src="../media/17_Cryptocurrency_Consultant_Agents_0.svg" alt="Mermaid Diagram"></p>
+<a id="agent-configuration-pattern" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Agent Configuration Pattern<a href="#agent-configuration-pattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>All cryptocurrency consultant agents follow a standardized configuration pattern with consistent completion settings and behavioral constraints.</p>
+<a id="common-configuration-elements" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Common Configuration Elements<a href="#common-configuration-elements" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Configuration Aspect</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Completion Method</td>
+<td><code>runner_stream_completion</code></td>
+<td>Streaming AI response generation</td>
+</tr>
+<tr>
+<td>Language Requirement</td>
+<td>Russian (<code>Всегда пиши ответ на русском языке</code>)</td>
+<td>Localized user interface</td>
+</tr>
+<tr>
+<td>Reasoning Level</td>
+<td>High</td>
+<td>Enhanced analytical capabilities</td>
+</tr>
+<tr>
+<td>Communication Format</td>
+<td>Text-only Markdown</td>
+<td>Simplified, reliable message format</td>
+</tr>
+</tbody>
+</table>
+<a id="behavioral-constraints" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Behavioral Constraints<a href="#behavioral-constraints" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each agent operates under strict behavioral guidelines:</p>
+<p><img src="../media/17_Cryptocurrency_Consultant_Agents_1.svg" alt="Mermaid Diagram"></p>
+<a id="individual-specialist-agents" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Individual Specialist Agents<a href="#individual-specialist-agents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="bitcoin-consultant-agent-btc_consultant_agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Bitcoin Consultant Agent (<code>btc_consultant_agent</code>)<a href="#bitcoin-consultant-agent-btc_consultant_agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><strong>Main Prompt:</strong> &quot;Ты часть роя агентов для консультации клиента по криптовалюте Bitcoin. Проконсультируй пользователя о стратегии торгов вызывая инструменты для получения дополнительной информации&quot;</p>
+<p><strong>Current Price Context:</strong> 111,983.60 USD</p>
+<p><strong>Navigation Triggers:</strong> Routes to <code>triage_agent</code> when users discuss ETH, BNB, XRP, or SOL instead of BTC.</p>
+<a id="ethereum-consultant-agent-eth_consultant_agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Ethereum Consultant Agent (<code>eth_consultant_agent</code>)<a href="#ethereum-consultant-agent-eth_consultant_agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><strong>Main Prompt:</strong> &quot;Ты часть роя агентов для консультации клиента по криптовалюте Ethereum. Проконсультируй пользователя о стратегии торгов вызывая инструменты для получения дополнительной информации&quot;</p>
+<p><strong>Current Price Context:</strong> 4,307.81 USD</p>
+<p><strong>Navigation Triggers:</strong> Routes to <code>triage_agent</code> when users discuss BTC, BNB, XRP, or SOL instead of ETH.</p>
+<a id="binance-coin-consultant-agent-bnb_consultant_agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Binance Coin Consultant Agent (<code>bnb_consultant_agent</code>)<a href="#binance-coin-consultant-agent-bnb_consultant_agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><strong>Main Prompt:</strong> &quot;Ты часть роя агентов для консультации клиента по криптовалюте Binance Coin (BNB). Проконсультируй пользователя о стратегии торгов вызывая инструменты для получения дополнительной информации&quot;</p>
+<p><strong>Current Price Context:</strong> 877.69 USD</p>
+<p><strong>Navigation Triggers:</strong> Routes to <code>triage_agent</code> when users discuss BTC, ETH, XRP, or SOL instead of BNB.</p>
+<a id="solana-consultant-agent-sol_consultant_agent" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Solana Consultant Agent (<code>sol_consultant_agent</code>)<a href="#solana-consultant-agent-sol_consultant_agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><strong>Main Prompt:</strong> &quot;Ты часть роя агентов для консультации клиента по криптовалюте Solana (SOL). Проконсультируй пользователя о стратегии торгов вызывая инструменты для получения дополнительной информации&quot;</p>
+<p><strong>Current Price Context:</strong> 214.08 USD</p>
+<p><strong>Navigation Triggers:</strong> Routes to <code>triage_agent</code> when users discuss BTC, ETH, BNB, or XRP instead of SOL.</p>
+<a id="shared-tool-ecosystem" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Shared Tool Ecosystem<a href="#shared-tool-ecosystem" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>All consultant agents share an identical set of 19 specialized tools, each optimized for different aspects of cryptocurrency analysis.</p>
+<a id="signal-analysis-tools" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Signal Analysis Tools<a href="#signal-analysis-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/17_Cryptocurrency_Consultant_Agents_2.svg" alt="Mermaid Diagram"></p>
+<a id="market-depth-and-structure-tools" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Market Depth and Structure Tools<a href="#market-depth-and-structure-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Tool Name</th>
+<th>Purpose</th>
+<th>Data Source</th>
+<th>Key Metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fetch_slope_data</code></td>
+<td>Minute-by-minute trend analysis</td>
+<td>120x 1min candles</td>
+<td>Price slope, momentum, VWAP</td>
+</tr>
+<tr>
+<td><code>fetch_volume_data</code></td>
+<td>Volume validation and liquidity</td>
+<td>220h candle data</td>
+<td>Pivot points, volume spikes, S/R levels</td>
+</tr>
+<tr>
+<td><code>fetch_whale_data</code></td>
+<td>Large player activity detection</td>
+<td>5min candles, 6h lookback</td>
+<td>Whale accumulation, OBV trends</td>
+</tr>
+<tr>
+<td><code>fetch_book_data</code></td>
+<td>Real-time order book analysis</td>
+<td>Live order book data</td>
+<td>Bid/ask depth, liquidity walls</td>
+</tr>
+</tbody>
+</table>
+<a id="social-media-monitoring-tools" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Social Media Monitoring Tools<a href="#social-media-monitoring-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/17_Cryptocurrency_Consultant_Agents_3.svg" alt="Mermaid Diagram"></p>
+<a id="historical-data-analysis-tools" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Historical Data Analysis Tools<a href="#historical-data-analysis-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Each agent provides comprehensive historical analysis across multiple timeframes and data granularities.</p>
+<a id="history-tool-categories" class="tsd-anchor"></a><h3 class="tsd-anchor-link">History Tool Categories<a href="#history-tool-categories" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/17_Cryptocurrency_Consultant_Agents_4.svg" alt="Mermaid Diagram"></p>
+<a id="navigation-and-communication-flow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Navigation and Communication Flow<a href="#navigation-and-communication-flow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="agent-handoff-mechanism" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent Handoff Mechanism<a href="#agent-handoff-mechanism" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>navigate_to_triage_tool</code> provides seamless agent transitions without explicit user notification.</p>
+<p><strong>Tool Description:</strong> &quot;Переключиться на агента Triage для вопросов не по теме. Если ты выбрал этот инструмент, не вызывай другие. ВАЖНО! Вызывая этот инструмент не отвечай на вопрос пользователя&quot;</p>
+<p><strong>Handoff Triggers:</strong></p>
+<ul>
+<li>User discusses cryptocurrencies outside agent's specialty</li>
+<li>Trading intent (buy/sell/predict) for non-specialty assets</li>
+<li>General cryptocurrency questions requiring broader context</li>
+</ul>
+<p><img src="../media/17_Cryptocurrency_Consultant_Agents_5.svg" alt="Mermaid Diagram"></p>
+<a id="error-handling-and-callbacks" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Error Handling and Callbacks<a href="#error-handling-and-callbacks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>All consultant agents implement the <code>onToolError</code> callback mechanism for robust error handling during tool execution. This ensures graceful degradation when technical analysis tools encounter issues such as data unavailability or API failures.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#cryptocurrency-consultant-agents"><span>Cryptocurrency <wbr/>Consultant <wbr/>Agents</span></a><ul><li><a href="#system-purpose-and-architecture"><span>System <wbr/>Purpose and <wbr/>Architecture</span></a></li><li><a href="#agent-configuration-pattern"><span>Agent <wbr/>Configuration <wbr/>Pattern</span></a></li><li><ul><li><a href="#common-configuration-elements"><span>Common <wbr/>Configuration <wbr/>Elements</span></a></li><li><a href="#behavioral-constraints"><span>Behavioral <wbr/>Constraints</span></a></li></ul></li><li><a href="#individual-specialist-agents"><span>Individual <wbr/>Specialist <wbr/>Agents</span></a></li><li><ul><li><a href="#bitcoin-consultant-agent-btc_consultant_agent"><span>Bitcoin <wbr/>Consultant <wbr/>Agent (btc_<wbr/>consultant_<wbr/>agent)</span></a></li><li><a href="#ethereum-consultant-agent-eth_consultant_agent"><span>Ethereum <wbr/>Consultant <wbr/>Agent (eth_<wbr/>consultant_<wbr/>agent)</span></a></li><li><a href="#binance-coin-consultant-agent-bnb_consultant_agent"><span>Binance <wbr/>Coin <wbr/>Consultant <wbr/>Agent (bnb_<wbr/>consultant_<wbr/>agent)</span></a></li><li><a href="#solana-consultant-agent-sol_consultant_agent"><span>Solana <wbr/>Consultant <wbr/>Agent (sol_<wbr/>consultant_<wbr/>agent)</span></a></li></ul></li><li><a href="#shared-tool-ecosystem"><span>Shared <wbr/>Tool <wbr/>Ecosystem</span></a></li><li><ul><li><a href="#signal-analysis-tools"><span>Signal <wbr/>Analysis <wbr/>Tools</span></a></li><li><a href="#market-depth-and-structure-tools"><span>Market <wbr/>Depth and <wbr/>Structure <wbr/>Tools</span></a></li><li><a href="#social-media-monitoring-tools"><span>Social <wbr/>Media <wbr/>Monitoring <wbr/>Tools</span></a></li></ul></li><li><a href="#historical-data-analysis-tools"><span>Historical <wbr/>Data <wbr/>Analysis <wbr/>Tools</span></a></li><li><ul><li><a href="#history-tool-categories"><span>History <wbr/>Tool <wbr/>Categories</span></a></li></ul></li><li><a href="#navigation-and-communication-flow"><span>Navigation and <wbr/>Communication <wbr/>Flow</span></a></li><li><ul><li><a href="#agent-handoff-mechanism"><span>Agent <wbr/>Handoff <wbr/>Mechanism</span></a></li></ul></li><li><a href="#error-handling-and-callbacks"><span>Error <wbr/>Handling and <wbr/>Callbacks</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

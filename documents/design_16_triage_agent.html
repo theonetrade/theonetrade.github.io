@@ -1,0 +1,132 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/16_triage_agent | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_16_triage_agent.html">design/16_triage_agent</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="triage-agent" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Triage Agent<a href="#triage-agent" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>The Triage Agent serves as the central routing component in the agent swarm system, responsible for analyzing user queries and directing them to appropriate cryptocurrency-specific consultant agents. This agent operates exclusively in Russian and acts as the primary entry point for user interactions with specialized trading consultants.</p>
+<p>For information about the specialized consultant agents that the Triage Agent routes to, see <a href="#5.2">Cryptocurrency Consultant Agents</a>. For broader context on the agent swarm architecture, see <a href="design_05_agent_swarm_system.html">Agent Swarm System</a>.</p>
+<a id="system-integration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">System Integration<a href="#system-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Triage Agent operates as part of the <code>RootSwarm</code> orchestration layer, functioning as the primary decision-making component that determines user intent and routes conversations accordingly.</p>
+<a id="agent-swarm-position" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent Swarm Position<a href="#agent-swarm-position" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/16_Triage_Agent_0.svg" alt="Mermaid Diagram"></p>
+<a id="core-functionality" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Core Functionality<a href="#core-functionality" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="language-and-communication" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Language and Communication<a href="#language-and-communication" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The Triage Agent operates with specific communication constraints and requirements:</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Language</strong></td>
+<td>Exclusively Russian (<code>Всегда пиши ответ на русском языке</code>)</td>
+</tr>
+<tr>
+<td><strong>Reasoning Level</strong></td>
+<td>High reasoning capability enabled</td>
+</tr>
+<tr>
+<td><strong>Message Format</strong></td>
+<td>Markdown text only - no images, files, tables, or HTML</td>
+</tr>
+<tr>
+<td><strong>Conversation Style</strong></td>
+<td>Natural conversational flow, avoiding formal greetings unless initiated by user</td>
+</tr>
+</tbody>
+</table>
+<a id="routing-decision-matrix" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Routing Decision Matrix<a href="#routing-decision-matrix" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The agent uses keyword and context analysis to determine cryptocurrency interest:</p>
+<table>
+<thead>
+<tr>
+<th>Cryptocurrency</th>
+<th>Trigger Keywords</th>
+<th>Target Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bitcoin</strong></td>
+<td>Bitcoin, BTC</td>
+<td><code>btc_consultant_agent</code></td>
+</tr>
+<tr>
+<td><strong>Ethereum</strong></td>
+<td>Ethereum, ETH, Эфириум, Эфир (not Classic)</td>
+<td><code>eth_consultant_agent</code></td>
+</tr>
+<tr>
+<td><strong>Binance Coin</strong></td>
+<td>Binance Coin, BNB, Binance Smart Chain</td>
+<td><code>bnb_consultant_agent</code></td>
+</tr>
+<tr>
+<td><strong>Ripple</strong></td>
+<td>Ripple, XRP, Рипл</td>
+<td><code>xrp_consultant_agent</code></td>
+</tr>
+<tr>
+<td><strong>Solana</strong></td>
+<td>Solana, SOL, Солана</td>
+<td><code>sol_consultant_agent</code></td>
+</tr>
+</tbody>
+</table>
+<a id="navigation-tools" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Navigation Tools<a href="#navigation-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Triage Agent employs five specialized navigation tools for routing users to appropriate consultants:</p>
+<a id="tool-implementation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Tool Implementation<a href="#tool-implementation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/16_Triage_Agent_1.svg" alt="Mermaid Diagram"></p>
+<a id="tool-characteristics" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Tool Characteristics<a href="#tool-characteristics" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each navigation tool follows the same pattern:</p>
+<ul>
+<li><strong>Parameters</strong>: Empty parameter set (no input required)</li>
+<li><strong>Exclusivity</strong>: Tools are mutually exclusive (<code>Если ты выбрал этот инструмент, не вызывай другие</code>)</li>
+<li><strong>Immediate Activation</strong>: Tools trigger immediately upon cryptocurrency mention detection</li>
+<li><strong>Error Handling</strong>: Implements <code>onToolError</code> callback for error management</li>
+</ul>
+<a id="conversation-management" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Conversation Management<a href="#conversation-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="non-cryptocurrency-interactions" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Non-Cryptocurrency Interactions<a href="#non-cryptocurrency-interactions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>When user queries don't relate to supported cryptocurrencies, the Triage Agent:</p>
+<ol>
+<li><strong>Maintains Conversational Flow</strong>: Acts as a friendly conversational partner</li>
+<li><strong>Avoids Topic Persistence</strong>: Does not attempt to maintain conversations when users abruptly change topics</li>
+<li><strong>Natural Interaction Style</strong>: Continues conversations as if users are familiar contacts</li>
+<li><strong>Direct Response Style</strong>: Avoids restating user questions, responds directly</li>
+</ol>
+<a id="response-constraints" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Response Constraints<a href="#response-constraints" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The agent operates under specific formatting limitations:</p>
+<ul>
+<li><strong>Supported</strong>: Text, Markdown formatting, Links</li>
+<li><strong>Unsupported</strong>: Images, Files, Tables, HTML, Line breaks</li>
+<li><strong>Style</strong>: Natural human-like responses without formal acknowledgments</li>
+</ul>
+<a id="technical-implementation" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Technical Implementation<a href="#technical-implementation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="agent-configuration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent Configuration<a href="#agent-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Completion Type</strong></td>
+<td><code>runner_stream_completion</code></td>
+</tr>
+<tr>
+<td><strong>Operator</strong></td>
+<td>Not specified (empty array)</td>
+</tr>
+<tr>
+<td><strong>Dependencies</strong></td>
+<td>5 consultant agents</td>
+</tr>
+<tr>
+<td><strong>Schema Reference</strong></td>
+<td><code>ai/swarm-schema/triage_agent</code></td>
+</tr>
+</tbody>
+</table>
+<a id="integration-points" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Integration Points<a href="#integration-points" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The Triage Agent integrates with the broader system through:</p>
+<ol>
+<li><strong>RootSwarm Coordination</strong>: Receives user queries from the root orchestrator</li>
+<li><strong>Consultant Agent Handoff</strong>: Transfers control to specialized agents via navigation tools</li>
+<li><strong>Error Handling</strong>: Manages tool execution errors through callback mechanisms</li>
+<li><strong>Schema Compliance</strong>: Follows standardized agent schema patterns</li>
+</ol>
+<a id="prompt-structure" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Prompt Structure<a href="#prompt-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="main-prompt" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Main Prompt<a href="#main-prompt" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The core directive is concise: <code>Определи, в какой криптовалюте заинтересован пользователь и перейдите к соответствующему агенту консультаций</code> (Determine which cryptocurrency the user is interested in and proceed to the appropriate consultation agent).</p>
+<a id="system-prompts" class="tsd-anchor"></a><h3 class="tsd-anchor-link">System Prompts<a href="#system-prompts" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The agent operates under four system prompt categories:</p>
+<ol>
+<li><strong>Navigation Guidelines</strong>: Cryptocurrency detection and routing logic</li>
+<li><strong>Communication Constraints</strong>: Format and capability limitations</li>
+<li><strong>Conversation Management</strong>: Behavioral guidelines for non-crypto interactions</li>
+<li><strong>Response Style</strong>: Natural interaction requirements</li>
+</ol>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#triage-agent"><span>Triage <wbr/>Agent</span></a><ul><li><a href="#system-integration"><span>System <wbr/>Integration</span></a></li><li><ul><li><a href="#agent-swarm-position"><span>Agent <wbr/>Swarm <wbr/>Position</span></a></li></ul></li><li><a href="#core-functionality"><span>Core <wbr/>Functionality</span></a></li><li><ul><li><a href="#language-and-communication"><span>Language and <wbr/>Communication</span></a></li><li><a href="#routing-decision-matrix"><span>Routing <wbr/>Decision <wbr/>Matrix</span></a></li></ul></li><li><a href="#navigation-tools"><span>Navigation <wbr/>Tools</span></a></li><li><ul><li><a href="#tool-implementation"><span>Tool <wbr/>Implementation</span></a></li><li><a href="#tool-characteristics"><span>Tool <wbr/>Characteristics</span></a></li></ul></li><li><a href="#conversation-management"><span>Conversation <wbr/>Management</span></a></li><li><ul><li><a href="#non-cryptocurrency-interactions"><span>Non-<wbr/>Cryptocurrency <wbr/>Interactions</span></a></li><li><a href="#response-constraints"><span>Response <wbr/>Constraints</span></a></li></ul></li><li><a href="#technical-implementation"><span>Technical <wbr/>Implementation</span></a></li><li><ul><li><a href="#agent-configuration"><span>Agent <wbr/>Configuration</span></a></li><li><a href="#integration-points"><span>Integration <wbr/>Points</span></a></li></ul></li><li><a href="#prompt-structure"><span>Prompt <wbr/>Structure</span></a></li><li><ul><li><a href="#main-prompt"><span>Main <wbr/>Prompt</span></a></li><li><a href="#system-prompts"><span>System <wbr/>Prompts</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

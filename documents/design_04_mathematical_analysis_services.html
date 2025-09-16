@@ -1,0 +1,317 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/04_mathematical_analysis_services | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_04_mathematical_analysis_services.html">design/04_mathematical_analysis_services</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="mathematical-analysis-services" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Mathematical Analysis Services<a href="#mathematical-analysis-services" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the six specialized mathematical analysis services that form the technical analysis backbone of the trading system. These services provide multi-timeframe technical indicator calculations, volume analysis, and momentum detection used by the AI Trading Engine for decision-making.</p>
+<p>For information about how these mathematical outputs are consumed by AI decision-making components, see <a href="design_03_ai_trading_engine.html">AI Trading Engine</a>. For details about the agent consultation system that uses these services, see <a href="design_05_agent_swarm_system.html">Agent Swarm System</a>.</p>
+<a id="service-architecture-overview" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Service Architecture Overview<a href="#service-architecture-overview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The mathematical analysis system consists of six specialized services, each optimized for different timeframes and trading strategies:</p>
+<p><img src="../media/04_Mathematical_Analysis_Services_0.svg" alt="Mermaid Diagram"></p>
+<a id="service-specifications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Service Specifications<a href="#service-specifications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="shorttermmathservice" class="tsd-anchor"></a><h3 class="tsd-anchor-link">ShortTermMathService<a href="#shorttermmathservice" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Optimized for 15-minute scalping operations with fast-reacting indicators for quick market entry/exit decisions.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Timeframe</strong></td>
+<td>15 minutes</td>
+<td>Scalping optimization</td>
+</tr>
+<tr>
+<td><strong>Candle Count</strong></td>
+<td>144</td>
+<td>36 hours of analysis</td>
+</tr>
+<tr>
+<td><strong>RSI Period</strong></td>
+<td>9</td>
+<td>Fast momentum detection</td>
+</tr>
+<tr>
+<td><strong>StochRSI Period</strong></td>
+<td>9</td>
+<td>Quick overbought/oversold</td>
+</tr>
+<tr>
+<td><strong>MACD</strong></td>
+<td>(8,21,5)</td>
+<td>Accelerated trend signals</td>
+</tr>
+<tr>
+<td><strong>Bollinger Bands</strong></td>
+<td>(10, 2.0)</td>
+<td>Tight volatility bands</td>
+</tr>
+<tr>
+<td><strong>Moving Averages</strong></td>
+<td>EMA(8), EMA(21), SMA(50)</td>
+<td>Multi-layer trend analysis</td>
+</tr>
+</tbody>
+</table>
+<a id="swingtermmathservice" class="tsd-anchor"></a><h3 class="tsd-anchor-link">SwingTermMathService<a href="#swingtermmathservice" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Balanced parameters for 30-minute swing trading with medium-term position holding capabilities.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Timeframe</strong></td>
+<td>30 minutes</td>
+<td>Swing trading balance</td>
+</tr>
+<tr>
+<td><strong>Candle Count</strong></td>
+<td>96</td>
+<td>48 hours of analysis</td>
+</tr>
+<tr>
+<td><strong>RSI Period</strong></td>
+<td>14</td>
+<td>Standard momentum</td>
+</tr>
+<tr>
+<td><strong>StochRSI Period</strong></td>
+<td>14</td>
+<td>Standard oscillator</td>
+</tr>
+<tr>
+<td><strong>MACD</strong></td>
+<td>(12,26,9)</td>
+<td>Classic trend following</td>
+</tr>
+<tr>
+<td><strong>Bollinger Bands</strong></td>
+<td>(20, 2)</td>
+<td>Standard volatility</td>
+</tr>
+<tr>
+<td><strong>Moving Averages</strong></td>
+<td>EMA(13), EMA(34), SMA(20)</td>
+<td>Trend confirmation</td>
+</tr>
+</tbody>
+</table>
+<a id="longtermmathservice" class="tsd-anchor"></a><h3 class="tsd-anchor-link">LongTermMathService<a href="#longtermmathservice" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Comprehensive 1-hour analysis for position trading with extensive indicator suite and trend strength assessment.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Timeframe</strong></td>
+<td>1 hour</td>
+<td>Position trading</td>
+</tr>
+<tr>
+<td><strong>Candle Count</strong></td>
+<td>48</td>
+<td>48 hours of analysis</td>
+</tr>
+<tr>
+<td><strong>RSI Period</strong></td>
+<td>14</td>
+<td>Standard momentum</td>
+</tr>
+<tr>
+<td><strong>MACD</strong></td>
+<td>(12,26,9) + Signal(9)</td>
+<td>Complete MACD system</td>
+</tr>
+<tr>
+<td><strong>Moving Averages</strong></td>
+<td>SMA(50), EMA(20), EMA(34), DEMA(21)</td>
+<td>Multi-MA confluence</td>
+</tr>
+<tr>
+<td><strong>Volatility</strong></td>
+<td>ATR(14), ATR(20)</td>
+<td>Risk assessment</td>
+</tr>
+<tr>
+<td><strong>Trend Strength</strong></td>
+<td>ADX(14), Momentum(10)</td>
+<td>Directional movement</td>
+</tr>
+<tr>
+<td><strong>Additional</strong></td>
+<td>CCI(20), Stochastic(14,3,3)</td>
+<td>Oscillator confirmation</td>
+</tr>
+</tbody>
+</table>
+<a id="volume-and-specialized-analysis-services" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Volume and Specialized Analysis Services<a href="#volume-and-specialized-analysis-services" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="volumedatamathservice" class="tsd-anchor"></a><h3 class="tsd-anchor-link">VolumeDataMathService<a href="#volumedatamathservice" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Dual-layer analysis system for institutional activity detection and key price level identification.</p>
+<p><img src="../media/04_Mathematical_Analysis_Services_1.svg" alt="Mermaid Diagram"></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Long Dataset</strong></td>
+<td>220 hourly candles</td>
+<td>SMA(200) baseline calculation</td>
+</tr>
+<tr>
+<td><strong>Analysis Window</strong></td>
+<td>96 hourly candles</td>
+<td>Active scalping indicators</td>
+</tr>
+<tr>
+<td><strong>Volume Threshold</strong></td>
+<td>1.5x average</td>
+<td>Spike detection trigger</td>
+</tr>
+<tr>
+<td><strong>Pivot Points</strong></td>
+<td>S1/S2/S3, R1/R2/R3</td>
+<td>Technical support/resistance</td>
+</tr>
+</tbody>
+</table>
+<a id="slopedatamathservice" class="tsd-anchor"></a><h3 class="tsd-anchor-link">SlopeDataMathService<a href="#slopedatamathservice" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Micro-trend analysis optimized for 1-minute scalping with momentum and slope calculations.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Timeframe</strong></td>
+<td>1 minute</td>
+<td>Micro-trend detection</td>
+</tr>
+<tr>
+<td><strong>Candle Count</strong></td>
+<td>120</td>
+<td>2 hours of analysis</td>
+</tr>
+<tr>
+<td><strong>Price Analysis</strong></td>
+<td>SMA(15), EMA(15), Linear Regression Slope</td>
+<td>Trend direction</td>
+</tr>
+<tr>
+<td><strong>Momentum</strong></td>
+<td>Momentum(10), Price Slope</td>
+<td>Acceleration detection</td>
+</tr>
+<tr>
+<td><strong>Volume Analysis</strong></td>
+<td>VWAP, VMA(15), Volume Momentum(10)</td>
+<td>Price-volume correlation</td>
+</tr>
+</tbody>
+</table>
+<a id="whaledetectionmathservice" class="tsd-anchor"></a><h3 class="tsd-anchor-link">WhaleDetectionMathService<a href="#whaledetectionmathservice" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Institutional activity recognition through volume anomaly and price-volume correlation analysis.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+<th>Detection Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Timeframe</strong></td>
+<td>5 minutes</td>
+<td>Institutional timeframe</td>
+</tr>
+<tr>
+<td><strong>Analysis Period</strong></td>
+<td>72 candles (6 hours)</td>
+<td>Pattern recognition window</td>
+</tr>
+<tr>
+<td><strong>Volume Anomalies</strong></td>
+<td>Statistical variance analysis</td>
+<td>Unusual trading volumes</td>
+</tr>
+<tr>
+<td><strong>Price Correlations</strong></td>
+<td>RSI divergence, MACD momentum</td>
+<td>Manipulation patterns</td>
+</tr>
+<tr>
+<td><strong>Trend Analysis</strong></td>
+<td>OBV (On-Balance Volume)</td>
+<td>Institutional flow direction</td>
+</tr>
+</tbody>
+</table>
+<a id="mathematical-indicator-integration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Mathematical Indicator Integration<a href="#mathematical-indicator-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="cross-service-data-flow" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Cross-Service Data Flow<a href="#cross-service-data-flow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/04_Mathematical_Analysis_Services_2.svg" alt="Mermaid Diagram"></p>
+<a id="precision-and-formatting-standards" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Precision and Formatting Standards<a href="#precision-and-formatting-standards" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>All mathematical services adhere to strict formatting requirements for consistency across the trading system:</p>
+<ul>
+<li><strong>Price Values</strong>: USD suffixes via <code>binanceService.formatPrice()</code></li>
+<li><strong>Volume Values</strong>: Formatted via <code>binanceService.formatQuantity()</code></li>
+<li><strong>Percentage Values</strong>: Explicit % symbols for relative calculations</li>
+<li><strong>Time Periods</strong>: Min/max values specified throughout system</li>
+<li><strong>Error Handling</strong>: N/A values for computation failures</li>
+</ul>
+<a id="historical-analysis-services" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Historical Analysis Services<a href="#historical-analysis-services" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The system includes seven specialized history services that provide historical indicator validation and pattern recognition:</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Timeframe</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LongTermHistoryService</code></td>
+<td>48-hour indicators</td>
+<td>Long-term pattern validation</td>
+</tr>
+<tr>
+<td><code>SwingTermHistoryService</code></td>
+<td>48-hour swing data</td>
+<td>Medium-term trend confirmation</td>
+</tr>
+<tr>
+<td><code>ShortTermHistoryService</code></td>
+<td>36-hour scalping data</td>
+<td>Short-term pattern recognition</td>
+</tr>
+<tr>
+<td><code>OneMinuteCandleHistoryService</code></td>
+<td>15 x 1-minute candles</td>
+<td>Micro-pattern analysis</td>
+</tr>
+<tr>
+<td><code>FifteenMinuteCandleHistoryService</code></td>
+<td>8 x 15-minute candles</td>
+<td>Scalping confirmation</td>
+</tr>
+<tr>
+<td><code>ThirtyMinuteCandleHistoryService</code></td>
+<td>6 x 30-minute candles</td>
+<td>Swing validation</td>
+</tr>
+<tr>
+<td><code>HourCandleHistoryService</code></td>
+<td>6 x 1-hour candles</td>
+<td>Position trend analysis</td>
+</tr>
+</tbody>
+</table>
+<p>These services provide historical context for current mathematical analysis, enabling pattern validation and trend confirmation across multiple timeframes.</p>
+<a id="integration-with-trading-pipeline" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Integration with Trading Pipeline<a href="#integration-with-trading-pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="service-consumption-patterns" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Service Consumption Patterns<a href="#service-consumption-patterns" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/04_Mathematical_Analysis_Services_3.svg" alt="Mermaid Diagram"></p>
+<p>The mathematical services operate with 30-60 second TTL caching to balance real-time accuracy with API efficiency. Each service specializes in its timeframe while contributing to a comprehensive multi-timeframe analysis framework used by the AI Trading Engine.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#mathematical-analysis-services"><span>Mathematical <wbr/>Analysis <wbr/>Services</span></a><ul><li><a href="#service-architecture-overview"><span>Service <wbr/>Architecture <wbr/>Overview</span></a></li><li><a href="#service-specifications"><span>Service <wbr/>Specifications</span></a></li><li><ul><li><a href="#shorttermmathservice"><span>Short<wbr/>Term<wbr/>Math<wbr/>Service</span></a></li><li><a href="#swingtermmathservice"><span>Swing<wbr/>Term<wbr/>Math<wbr/>Service</span></a></li><li><a href="#longtermmathservice"><span>Long<wbr/>Term<wbr/>Math<wbr/>Service</span></a></li></ul></li><li><a href="#volume-and-specialized-analysis-services"><span>Volume and <wbr/>Specialized <wbr/>Analysis <wbr/>Services</span></a></li><li><ul><li><a href="#volumedatamathservice"><span>Volume<wbr/>Data<wbr/>Math<wbr/>Service</span></a></li><li><a href="#slopedatamathservice"><span>Slope<wbr/>Data<wbr/>Math<wbr/>Service</span></a></li><li><a href="#whaledetectionmathservice"><span>Whale<wbr/>Detection<wbr/>Math<wbr/>Service</span></a></li></ul></li><li><a href="#mathematical-indicator-integration"><span>Mathematical <wbr/>Indicator <wbr/>Integration</span></a></li><li><ul><li><a href="#cross-service-data-flow"><span>Cross-<wbr/>Service <wbr/>Data <wbr/>Flow</span></a></li><li><a href="#precision-and-formatting-standards"><span>Precision and <wbr/>Formatting <wbr/>Standards</span></a></li></ul></li><li><a href="#historical-analysis-services"><span>Historical <wbr/>Analysis <wbr/>Services</span></a></li><li><a href="#integration-with-trading-pipeline"><span>Integration with <wbr/>Trading <wbr/>Pipeline</span></a></li><li><ul><li><a href="#service-consumption-patterns"><span>Service <wbr/>Consumption <wbr/>Patterns</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

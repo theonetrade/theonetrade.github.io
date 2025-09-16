@@ -1,0 +1,109 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/13_docker_and_process_management | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_13_docker_and_process_management.html">design/13_docker_and_process_management</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="docker-and-process-management" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Docker and Process Management<a href="#docker-and-process-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the containerization strategy and process management configuration for the Signal trading system. It explains how the system is packaged using Docker and managed in production using PM2 (Process Manager 2) with automatic restart policies and resource monitoring.</p>
+<p>For information about environment configuration and feature flags, see <a href="design_12_environment_configuration.html">Environment Configuration</a>. For details about the build system and dependency management, see <a href="design_14_build_system_and_dependencies.html">Build System and Dependencies</a>.</p>
+<a id="containerization-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Containerization Architecture<a href="#containerization-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Signal trading system uses Docker for containerization with a lightweight Alpine Linux base image running Bun as the JavaScript runtime. The container packages all necessary build artifacts and dependencies for production deployment.</p>
+<a id="docker-container-setup" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Docker Container Setup<a href="#docker-container-setup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/13_Docker_and_Process_Management_0.svg" alt="Mermaid Diagram"></p>
+<p>The Docker configuration uses the Bun runtime for optimal performance with TypeScript/JavaScript applications. The container includes <code>curl</code> for health checks and API communications with external services.</p>
+<a id="pm2-process-management" class="tsd-anchor"></a><h2 class="tsd-anchor-link">PM2 Process Management<a href="#pm2-process-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The production deployment uses PM2 to manage two critical processes: the main trading application and the Binance integration tool. Each process has independent monitoring, logging, and restart policies.</p>
+<a id="process-architecture" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Process Architecture<a href="#process-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/13_Docker_and_Process_Management_1.svg" alt="Mermaid Diagram"></p>
+<a id="process-configuration-details" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Process Configuration Details<a href="#process-configuration-details" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Process</th>
+<th>Script</th>
+<th>Purpose</th>
+<th>Memory Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tradegpt-one-main</code></td>
+<td><code>./build/index.mjs --serve</code></td>
+<td>Main trading application with web interface</td>
+<td>4096M</td>
+</tr>
+<tr>
+<td><code>tradegpt-binance</code></td>
+<td><code>./build/tools/binance-tool/build/index.mjs</code></td>
+<td>Binance API integration and market data</td>
+<td>4096M</td>
+</tr>
+</tbody>
+</table>
+<p>Both processes use:</p>
+<ul>
+<li><strong>Execution Mode:</strong> <code>fork</code> (single instance per process)</li>
+<li><strong>Auto-restart:</strong> Enabled with daily cron restart at midnight</li>
+<li><strong>Memory Monitoring:</strong> Automatic restart at 4GB memory usage</li>
+<li><strong>Runtime:</strong> Bun interpreter from <code>~/.bun/bin/bun</code></li>
+</ul>
+<a id="environment-configuration-loading" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Environment Configuration Loading<a href="#environment-configuration-loading" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The PM2 ecosystem configuration includes dynamic environment loading that reads from <code>.env</code> files when available or falls back to system environment variables.</p>
+<p><img src="../media/13_Docker_and_Process_Management_2.svg" alt="Mermaid Diagram"></p>
+<p>The <code>readConfig()</code> function uses a singleton pattern via <code>singleshot()</code> to cache the environment configuration and avoid repeated file system reads.</p>
+<a id="logging-and-monitoring" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Logging and Monitoring<a href="#logging-and-monitoring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Each PM2 process maintains separate log files with timestamp formatting and automatic log merging. The logging configuration supports both output and error streams.</p>
+<a id="log-file-structure" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Log File Structure<a href="#log-file-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Process</th>
+<th>Output Log</th>
+<th>Error Log</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main Application</td>
+<td><code>./logs/pm2/tradegpt-one-main-out.log</code></td>
+<td><code>./logs/pm2/tradegpt-one-main-error.log</code></td>
+<td><code>YYYY-MM-DD HH:mm:ss</code></td>
+</tr>
+<tr>
+<td>Binance Tool</td>
+<td><code>./logs/pm2/tradegpt-binance-out.log</code></td>
+<td><code>./logs/pm2/tradegpt-binance-error.log</code></td>
+<td><code>YYYY-MM-DD HH:mm:ss</code></td>
+</tr>
+</tbody>
+</table>
+<p>All processes use <code>merge_logs: true</code> to combine stdout and stderr streams into unified log files with consistent timestamp formatting.</p>
+<a id="resource-management-and-restart-policies" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Resource Management and Restart Policies<a href="#resource-management-and-restart-policies" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The system implements multiple layers of process resilience to ensure continuous operation of the trading system.</p>
+<a id="restart-policy-matrix" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Restart Policy Matrix<a href="#restart-policy-matrix" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Restart Trigger</th>
+<th>Frequency</th>
+<th>Action</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cron Restart</strong></td>
+<td>Daily at 00:00 UTC</td>
+<td>Clean restart both processes</td>
+<td>Prevents memory leaks, clears caches</td>
+</tr>
+<tr>
+<td><strong>Memory Restart</strong></td>
+<td>When process exceeds 4096M</td>
+<td>Automatic restart</td>
+<td>Prevents OOM crashes</td>
+</tr>
+<tr>
+<td><strong>Crash Restart</strong></td>
+<td>Immediate on process exit</td>
+<td>Automatic restart</td>
+<td>Maintains system availability</td>
+</tr>
+<tr>
+<td><strong>Manual Restart</strong></td>
+<td>On-demand via PM2 commands</td>
+<td>Controlled restart</td>
+<td>Deployment and maintenance</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>autorestart: true</code> configuration ensures that any unexpected process termination triggers an immediate restart attempt, while the memory limit prevents runaway memory consumption from affecting system stability.</p>
+<a id="deployment-file-structure" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Deployment File Structure<a href="#deployment-file-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Docker container and PM2 configuration expect a specific directory structure with pre-built artifacts:</p>
+<p><img src="../media/13_Docker_and_Process_Management_3.svg" alt="Mermaid Diagram"></p>
+<p>The containerized deployment separates the container entry point (<code>index.cjs</code>) from the PM2-managed processes, allowing for flexible process orchestration within the container environment.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#docker-and-process-management"><span>Docker and <wbr/>Process <wbr/>Management</span></a><ul><li><a href="#containerization-architecture"><span>Containerization <wbr/>Architecture</span></a></li><li><ul><li><a href="#docker-container-setup"><span>Docker <wbr/>Container <wbr/>Setup</span></a></li></ul></li><li><a href="#pm2-process-management"><span>PM2 <wbr/>Process <wbr/>Management</span></a></li><li><ul><li><a href="#process-architecture"><span>Process <wbr/>Architecture</span></a></li><li><a href="#process-configuration-details"><span>Process <wbr/>Configuration <wbr/>Details</span></a></li></ul></li><li><a href="#environment-configuration-loading"><span>Environment <wbr/>Configuration <wbr/>Loading</span></a></li><li><a href="#logging-and-monitoring"><span>Logging and <wbr/>Monitoring</span></a></li><li><ul><li><a href="#log-file-structure"><span>Log <wbr/>File <wbr/>Structure</span></a></li></ul></li><li><a href="#resource-management-and-restart-policies"><span>Resource <wbr/>Management and <wbr/>Restart <wbr/>Policies</span></a></li><li><ul><li><a href="#restart-policy-matrix"><span>Restart <wbr/>Policy <wbr/>Matrix</span></a></li></ul></li><li><a href="#deployment-file-structure"><span>Deployment <wbr/>File <wbr/>Structure</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

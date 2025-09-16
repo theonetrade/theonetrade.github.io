@@ -1,0 +1,166 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/20_backtesting_system | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_20_backtesting_system.html">design/20_backtesting_system</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="backtesting-system" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Backtesting System<a href="#backtesting-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the comprehensive backtesting framework that captures and analyzes all trading decisions and their real-market outcomes. The system provides complete audit trails from AI decision inputs through execution to final P&amp;L results, enabling strategy evaluation and machine learning dataset generation.</p>
+<p>For information about the core trading decision pipeline, see <a href="design_03_ai_trading_engine.html">AI Trading Engine</a>. For details about mathematical analysis services that provide input data, see <a href="design_04_mathematical_analysis_services.html">Mathematical Analysis Services</a>.</p>
+<a id="data-structure-and-event-model" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Data Structure and Event Model<a href="#data-structure-and-event-model" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The backtesting system uses a comprehensive event-sourcing model to capture every aspect of trading activity. The core data structure is the <code>BacktestEventRow</code> interface, which records all trading decisions and their outcomes.</p>
+<a id="backtesteventrow-schema" class="tsd-anchor"></a><h3 class="tsd-anchor-link">BacktestEventRow Schema<a href="#backtesteventrow-schema" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system tracks eight types of trading events with complete metadata:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resultId</code></td>
+<td>string | null</td>
+<td>Links to complete LLM interaction logs</td>
+</tr>
+<tr>
+<td><code>signalId</code></td>
+<td>string | null</td>
+<td>Groups events into trading chains</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>Date</td>
+<td>Precise timestamp of decision/execution</td>
+</tr>
+<tr>
+<td><code>takeProfit</code></td>
+<td>boolean | null</td>
+<td>Successful target achievement</td>
+</tr>
+<tr>
+<td><code>stopLoss</code></td>
+<td>boolean | null</td>
+<td>Maximum loss protection trigger</td>
+</tr>
+<tr>
+<td><code>closeProfit</code></td>
+<td>boolean | null</td>
+<td>Early profitable closure</td>
+</tr>
+<tr>
+<td><code>closeLoss</code></td>
+<td>boolean | null</td>
+<td>Early loss-cutting closure</td>
+</tr>
+<tr>
+<td><code>watch</code></td>
+<td>boolean | null</td>
+<td>Position monitoring activity</td>
+</tr>
+<tr>
+<td><code>wait</code></td>
+<td>boolean | null</td>
+<td>Market analysis with no action</td>
+</tr>
+<tr>
+<td><code>buy</code></td>
+<td>boolean | null</td>
+<td>Position opening execution</td>
+</tr>
+<tr>
+<td><code>profitLossPercent</code></td>
+<td>number | null</td>
+<td>Actual percentage return</td>
+</tr>
+<tr>
+<td><code>profitLossUsd</code></td>
+<td>number | null</td>
+<td>Dollar profit/loss amount</td>
+</tr>
+<tr>
+<td><code>currentPrice</code></td>
+<td>number | null</td>
+<td>Market price at decision time</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Backtesting Event Flow</strong>
+<img src="../media/20_Backtesting_System_0.svg" alt="Mermaid Diagram"></p>
+<a id="trade-outcome-categories" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Trade Outcome Categories<a href="#trade-outcome-categories" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system classifies all completed trades into four distinct outcome categories based on exit conditions and profitability:</p>
+<p><strong>Trade Classification Matrix</strong>
+<img src="../media/20_Backtesting_System_1.svg" alt="Mermaid Diagram"></p>
+<a id="trade-lifecycle-tracking" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Trade Lifecycle Tracking<a href="#trade-lifecycle-tracking" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="signal-chain-reconstruction" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Signal Chain Reconstruction<a href="#signal-chain-reconstruction" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>BacktestMeasureService</code> reconstructs complete trading narratives by grouping events under common <code>signalId</code> values. Each signal represents a complete trading cycle from initial analysis through final closure.</p>
+<p><strong>Signal Chain Analysis Architecture</strong>
+<img src="../media/20_Backtesting_System_2.svg" alt="Mermaid Diagram"></p>
+<a id="event-timestamp-analysis" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Event Timestamp Analysis<a href="#event-timestamp-analysis" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system maintains precise temporal relationships between AI decisions and market execution. Each <code>resultId</code> links backtest events to complete LLM interaction logs, providing full decision context reconstruction.</p>
+<p>Example signal chain from actual backtest data:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event Type</th>
+<th>ResultId</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-09-09 05:16:29</td>
+<td>buy</td>
+<td>7f40d0db-40b9-4000-adc7-72a78a38d000</td>
+<td>Position opening</td>
+</tr>
+<tr>
+<td>2025-09-09 05:20:44</td>
+<td>watch</td>
+<td>19cc912c-3ef2-4800-a6ba-37c2d33e4800</td>
+<td>Position monitoring</td>
+</tr>
+<tr>
+<td>2025-09-09 06:04:22</td>
+<td>takeProfit</td>
+<td>N/A</td>
+<td>Target achievement</td>
+</tr>
+</tbody>
+</table>
+<a id="performance-analysis-and-reporting" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Performance Analysis and Reporting<a href="#performance-analysis-and-reporting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="backtestmeasureservice-implementation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">BacktestMeasureService Implementation<a href="#backtestmeasureservice-implementation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>BacktestMeasureService</code> provides comprehensive trade performance analysis through statistical aggregation and outcome classification.</p>
+<p><strong>Performance Analysis Pipeline</strong>
+<img src="../media/20_Backtesting_System_3.svg" alt="Mermaid Diagram"></p>
+<a id="statistical-metrics" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Statistical Metrics<a href="#statistical-metrics" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system calculates key performance indicators for strategy evaluation:</p>
+<ul>
+<li><strong>Success Rate</strong>: Percentage of profitable trades (Full Profit + Partial Profit)</li>
+<li><strong>Average Return</strong>: Mean percentage return across all completed trades</li>
+<li><strong>Maximum Drawdown</strong>: Worst loss scenario analysis</li>
+<li><strong>Trade Duration</strong>: Time from buy to terminal event</li>
+<li><strong>P&amp;L Distribution</strong>: Profit/loss histogram across outcome categories</li>
+</ul>
+<a id="data-integration-and-export" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Data Integration and Export<a href="#data-integration-and-export" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="resultid-linking-system" class="tsd-anchor"></a><h3 class="tsd-anchor-link">ResultId Linking System<a href="#resultid-linking-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Every backtest event includes a <code>resultId</code> that links to complete AI decision records, enabling full context reconstruction for machine learning applications.</p>
+<p><strong>Multi-Dimensional Data Linkage</strong>
+<img src="../media/20_Backtesting_System_4.svg" alt="Mermaid Diagram"></p>
+<a id="export-infrastructure" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Export Infrastructure<a href="#export-infrastructure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system provides multiple export formats for research and development applications:</p>
+<pre><code class="typescript"><span class="hl-7">// Export API endpoint structure</span><br/><span class="hl-0">app</span><span class="hl-1">.</span><span class="hl-2">post</span><span class="hl-1">(</span><span class="hl-6">&#39;/export/backtest&#39;</span><span class="hl-1">, </span><span class="hl-9">async</span><span class="hl-1"> (</span><span class="hl-0">req</span><span class="hl-1">, </span><span class="hl-0">res</span><span class="hl-1">) </span><span class="hl-9">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-9">const</span><span class="hl-1"> { </span><span class="hl-3">symbol</span><span class="hl-1">, </span><span class="hl-3">period</span><span class="hl-1"> } = </span><span class="hl-0">req</span><span class="hl-1">.</span><span class="hl-0">body</span><span class="hl-1">;</span><br/><span class="hl-1">    </span><br/><span class="hl-1">    </span><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">dataset</span><span class="hl-1"> = </span><span class="hl-8">await</span><span class="hl-1"> </span><span class="hl-0">backtestMeasureService</span><span class="hl-1">.</span><span class="hl-2">getBacktestMeasure</span><span class="hl-1">(</span><span class="hl-0">symbol</span><span class="hl-1">, </span><span class="hl-0">period</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">report</span><span class="hl-1"> = </span><span class="hl-8">await</span><span class="hl-1"> </span><span class="hl-0">backtestMeasureService</span><span class="hl-1">.</span><span class="hl-2">generateBacktestMeasureReport</span><span class="hl-1">(</span><span class="hl-0">symbol</span><span class="hl-1">, </span><span class="hl-0">period</span><span class="hl-1">);</span><br/><span class="hl-1">    </span><br/><span class="hl-1">    </span><span class="hl-8">return</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-0">structured_data:</span><span class="hl-1"> </span><span class="hl-0">dataset</span><span class="hl-1">,     </span><span class="hl-7">// JSON for ML pipelines</span><br/><span class="hl-1">        </span><span class="hl-0">human_readable:</span><span class="hl-1"> </span><span class="hl-0">report</span><span class="hl-1">,       </span><span class="hl-7">// Markdown for analysis</span><br/><span class="hl-1">        </span><span class="hl-0">metadata:</span><span class="hl-1"> {</span><br/><span class="hl-1">            </span><span class="hl-0">total_trades:</span><span class="hl-1"> </span><span class="hl-0">dataset</span><span class="hl-1">.</span><span class="hl-0">totalTrades</span><span class="hl-1">,</span><br/><span class="hl-1">            </span><span class="hl-0">success_rate:</span><span class="hl-1"> </span><span class="hl-0">dataset</span><span class="hl-1">.</span><span class="hl-0">successRate</span><span class="hl-1">,</span><br/><span class="hl-1">            </span><span class="hl-0">avg_return:</span><span class="hl-1"> </span><span class="hl-0">dataset</span><span class="hl-1">.</span><span class="hl-0">averageReturn</span><span class="hl-1">,</span><br/><span class="hl-1">            </span><span class="hl-0">max_drawdown:</span><span class="hl-1"> </span><span class="hl-0">dataset</span><span class="hl-1">.</span><span class="hl-0">maxDrawdown</span><br/><span class="hl-1">        }</span><br/><span class="hl-1">    };</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="development-applications" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Development Applications<a href="#development-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="machine-learning-dataset-generation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Machine Learning Dataset Generation<a href="#machine-learning-dataset-generation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The backtesting system creates comprehensive supervised learning datasets with complete feature vectors and outcome labels:</p>
+<p><strong>Training Data Structure</strong>:</p>
+<ul>
+<li><strong>Input Features</strong>: Technical indicators, volume data, timeframe analysis, market conditions, social signals</li>
+<li><strong>Target Labels</strong>: Optimal actions (trade/wait/close/hold), position types (long/short), success probabilities</li>
+<li><strong>Performance Metrics</strong>: Actual returns, trade duration, maximum drawdown, success categories</li>
+</ul>
+<p><strong>Reinforcement Learning Environment</strong>:</p>
+<ul>
+<li><strong>State Space</strong>: Market features, position state, historical performance</li>
+<li><strong>Action Space</strong>: Signal actions, risk actions, position sizing</li>
+<li><strong>Reward Function</strong>: P&amp;L-based with risk penalties and timing bonuses</li>
+</ul>
+<a id="strategy-validation-framework" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Strategy Validation Framework<a href="#strategy-validation-framework" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system supports comprehensive strategy backtesting through historical data analysis:</p>
+<ol>
+<li><strong>Historical P&amp;L Reconstruction</strong>: Complete profit/loss tracking for strategy evaluation</li>
+<li><strong>Feature Flag Testing</strong>: Analysis of different AI behavior configurations</li>
+<li><strong>Model Performance Comparison</strong>: A/B testing of different LLM providers</li>
+<li><strong>Risk Assessment Validation</strong>: Verification of risk management effectiveness</li>
+</ol>
+<a id="integration-support" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Integration Support<a href="#integration-support" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The backtesting system exports data in formats compatible with major analysis frameworks:</p>
+<ul>
+<li><strong>Python ML Libraries</strong>: Pandas, NumPy, Scikit-learn compatible formats</li>
+<li><strong>Deep Learning Frameworks</strong>: TensorFlow, PyTorch ready datasets</li>
+<li><strong>Statistical Analysis</strong>: R, MATLAB compatible time-series data</li>
+<li><strong>Visualization Tools</strong>: Plotly, D3.js compatible JSON structures</li>
+</ul>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#backtesting-system"><span>Backtesting <wbr/>System</span></a><ul><li><a href="#data-structure-and-event-model"><span>Data <wbr/>Structure and <wbr/>Event <wbr/>Model</span></a></li><li><ul><li><a href="#backtesteventrow-schema"><span>Backtest<wbr/>Event<wbr/>Row <wbr/>Schema</span></a></li><li><a href="#trade-outcome-categories"><span>Trade <wbr/>Outcome <wbr/>Categories</span></a></li></ul></li><li><a href="#trade-lifecycle-tracking"><span>Trade <wbr/>Lifecycle <wbr/>Tracking</span></a></li><li><ul><li><a href="#signal-chain-reconstruction"><span>Signal <wbr/>Chain <wbr/>Reconstruction</span></a></li><li><a href="#event-timestamp-analysis"><span>Event <wbr/>Timestamp <wbr/>Analysis</span></a></li></ul></li><li><a href="#performance-analysis-and-reporting"><span>Performance <wbr/>Analysis and <wbr/>Reporting</span></a></li><li><ul><li><a href="#backtestmeasureservice-implementation"><span>Backtest<wbr/>Measure<wbr/>Service <wbr/>Implementation</span></a></li><li><a href="#statistical-metrics"><span>Statistical <wbr/>Metrics</span></a></li></ul></li><li><a href="#data-integration-and-export"><span>Data <wbr/>Integration and <wbr/>Export</span></a></li><li><ul><li><a href="#resultid-linking-system"><span>Result<wbr/>Id <wbr/>Linking <wbr/>System</span></a></li><li><a href="#export-infrastructure"><span>Export <wbr/>Infrastructure</span></a></li></ul></li><li><a href="#development-applications"><span>Development <wbr/>Applications</span></a></li><li><ul><li><a href="#machine-learning-dataset-generation"><span>Machine <wbr/>Learning <wbr/>Dataset <wbr/>Generation</span></a></li><li><a href="#strategy-validation-framework"><span>Strategy <wbr/>Validation <wbr/>Framework</span></a></li><li><a href="#integration-support"><span>Integration <wbr/>Support</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

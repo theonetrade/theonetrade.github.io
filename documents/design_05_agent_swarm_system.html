@@ -1,0 +1,192 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/05_agent_swarm_system | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_05_agent_swarm_system.html">design/05_agent_swarm_system</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="agent-swarm-system" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Agent Swarm System<a href="#agent-swarm-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><a id="purpose-and-scope" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Purpose and Scope<a href="#purpose-and-scope" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Agent Swarm System provides multi-agent AI consultation capabilities for cryptocurrency analysis and trading advice. This system enables users to interact with specialized AI consultants through a natural language interface, with each consultant having deep expertise in specific cryptocurrencies and access to comprehensive technical analysis tools.</p>
+<p>This document covers the agent coordination architecture, specialized consultant implementations, and tool ecosystem. For information about the core trading logic that agents can analyze, see <a href="design_03_ai_trading_engine.html">AI Trading Engine</a>. For details about the mathematical analysis services that power agent tools, see <a href="design_04_mathematical_analysis_services.html">Mathematical Analysis Services</a>.</p>
+<a id="system-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">System Architecture<a href="#system-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Agent Swarm System operates as a multi-layered architecture with centralized coordination, intelligent routing, and specialized domain expertise.</p>
+<a id="agent-swarm-architecture" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent Swarm Architecture<a href="#agent-swarm-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/05_Agent_Swarm_System_0.svg" alt="Mermaid Diagram"></p>
+<a id="agent-coordination-and-routing" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Agent Coordination and Routing<a href="#agent-coordination-and-routing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="central-coordination" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Central Coordination<a href="#central-coordination" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>RootSwarm</code> serves as the central coordinator for all agent interactions, managing the flow of conversations between users and specialized consultants.</p>
+<a id="triage-agent-implementation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Triage Agent Implementation<a href="#triage-agent-implementation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>TriageAgent</code> acts as the intelligent router that determines user intent and directs conversations to appropriate specialists.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent Name</td>
+<td><code>AgentName.TriageAgent</code></td>
+</tr>
+<tr>
+<td>Completion</td>
+<td><code>CompletionName.HfStreamCompletion</code></td>
+</tr>
+<tr>
+<td>Max Tool Calls</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Keep Messages</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Language</td>
+<td>Russian</td>
+</tr>
+</tbody>
+</table>
+<a id="routing-logic" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Routing Logic<a href="#routing-logic" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>The triage agent analyzes user queries to identify cryptocurrency interest and routes accordingly:</p>
+<p><img src="../media/05_Agent_Swarm_System_1.svg" alt="Mermaid Diagram"></p>
+<a id="specialized-consultant-agents" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Specialized Consultant Agents<a href="#specialized-consultant-agents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="common-architecture" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Common Architecture<a href="#common-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>All consultant agents share a unified architecture with cryptocurrency-specific specialization:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Common Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Completion</td>
+<td><code>CompletionName.HfStreamCompletion</code></td>
+</tr>
+<tr>
+<td>Max Tool Calls</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Keep Messages</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Language</td>
+<td>Russian</td>
+</tr>
+</tbody>
+</table>
+<a id="dynamic-price-integration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Dynamic Price Integration<a href="#dynamic-price-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each consultant agent provides real-time market context through <code>systemDynamic</code> functions:</p>
+<p><img src="../media/05_Agent_Swarm_System_2.svg" alt="Mermaid Diagram"></p>
+<a id="agent-specific-implementation" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent-Specific Implementation<a href="#agent-specific-implementation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Symbol</th>
+<th>systemDynamic Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BtcConsultantAgent</td>
+<td>BTCUSDT</td>
+<td><code>getMarketPrice(&quot;BTCUSDT&quot;)</code></td>
+</tr>
+<tr>
+<td>EthConsultantAgent</td>
+<td>ETHUSDT</td>
+<td><code>getMarketPrice(&quot;ETHUSDT&quot;)</code></td>
+</tr>
+<tr>
+<td>BnbConsultantAgent</td>
+<td>BNBUSDT</td>
+<td><code>getMarketPrice(&quot;BNBUSDT&quot;)</code></td>
+</tr>
+<tr>
+<td>XrpConsultantAgent</td>
+<td>XRPUSDT</td>
+<td><code>getMarketPrice(&quot;XRPUSDT&quot;)</code></td>
+</tr>
+<tr>
+<td>SolConsultantAgent</td>
+<td>SOLUSDT</td>
+<td><code>getMarketPrice(&quot;SOLUSDT&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<a id="tool-ecosystem" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Tool Ecosystem<a href="#tool-ecosystem" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="technical-analysis-tools" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Technical Analysis Tools<a href="#technical-analysis-tools" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each consultant agent has access to a comprehensive suite of technical analysis tools:</p>
+<table>
+<thead>
+<tr>
+<th>Tool Category</th>
+<th>Tool Names</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multi-Timeframe Signals</td>
+<td><code>FetchShortTermRangeSignals</code><br/><code>FetchSwingTermRangeSignals</code><br/><code>FetchLongTermRangeSignals</code></td>
+<td>15m, 30m, 1h technical analysis</td>
+</tr>
+<tr>
+<td>Market Microstructure</td>
+<td><code>FetchVolumeData</code><br/><code>FetchSlopeData</code><br/><code>FetchWhaleData</code></td>
+<td>Volume, momentum, institutional activity</td>
+</tr>
+<tr>
+<td>Social Intelligence</td>
+<td><code>FetchMastodonNews</code><br/><code>FetchTwitterNews</code></td>
+<td>Social sentiment analysis</td>
+</tr>
+<tr>
+<td>Historical Context</td>
+<td><code>FetchLongTermHistory</code><br/><code>FetchShortTermHistory</code><br/><code>FetchSwingTermHistory</code></td>
+<td>Historical pattern analysis</td>
+</tr>
+<tr>
+<td>Candle Analysis</td>
+<td><code>FetchHourCandleHistory</code><br/><code>FetchThirtyMinuteCandleHistory</code><br/><code>FetchFifteenMinuteCandleHistory</code><br/><code>FetchOneMinuteCandleHistory</code></td>
+<td>Multi-timeframe candlestick data</td>
+</tr>
+</tbody>
+</table>
+<a id="tool-integration-pattern" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Tool Integration Pattern<a href="#tool-integration-pattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/05_Agent_Swarm_System_3.svg" alt="Mermaid Diagram"></p>
+<a id="ai-inference-system" class="tsd-anchor"></a><h2 class="tsd-anchor-link">AI Inference System<a href="#ai-inference-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="dynamic-model-selection" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Dynamic Model Selection<a href="#dynamic-model-selection" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The agent swarm utilizes a sophisticated AI inference system that allows runtime model selection through the <code>InferenceMetaService</code>.</p>
+<a id="available-ai-providers" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Available AI Providers<a href="#available-ai-providers" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Models</th>
+<th>IDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HuggingFace</td>
+<td><code>openai/gpt-oss-120b</code><br/><code>deepseek-ai/DeepSeek-R1</code><br/><code>deepseek-ai/DeepSeek-V3</code></td>
+<td>0, 1, 2</td>
+</tr>
+<tr>
+<td>xAI Grok</td>
+<td><code>grok-3</code><br/><code>grok-3-mini</code></td>
+<td>3, 4</td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td><code>gpt-oss:120b</code><br/><code>deepseek-r1:671b</code><br/><code>deepseek-v3:671b</code></td>
+<td>5, 6, 7</td>
+</tr>
+</tbody>
+</table>
+<a id="model-selection-architecture" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Model Selection Architecture<a href="#model-selection-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><img src="../media/05_Agent_Swarm_System_4.svg" alt="Mermaid Diagram"></p>
+<a id="runtime-model-selection-logic" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Runtime Model Selection Logic<a href="#runtime-model-selection-logic" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>The <code>InferenceMetaService.getActiveInference()</code> method implements the selection logic:</p>
+<ol>
+<li>Checks Boolean flags <code>isInferenceSelection0</code> through <code>isInferenceSelection7</code></li>
+<li>Returns corresponding entry from <code>INFERENCE_LIST</code></li>
+<li>Falls back to default model (ID 0) if no selection is active</li>
+</ol>
+<a id="integration-with-trading-system" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Integration with Trading System<a href="#integration-with-trading-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="agent-trading-system-bridge" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Agent-Trading System Bridge<a href="#agent-trading-system-bridge" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The Agent Swarm System integrates seamlessly with the core trading infrastructure, enabling agents to provide analysis using the same mathematical services that power automated trading decisions.</p>
+<a id="shared-service-dependencies" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Shared Service Dependencies<a href="#shared-service-dependencies" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><img src="../media/05_Agent_Swarm_System_5.svg" alt="Mermaid Diagram"></p>
+<p>This shared architecture ensures consistency between manual agent consultations and automated trading decisions, as both systems utilize identical technical analysis calculations and market data sources.</p>
+<a id="error-handling-and-resilience" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Error Handling and Resilience<a href="#error-handling-and-resilience" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The Agent Swarm System implements comprehensive error handling through callback mechanisms:</p>
+<a id="tool-error-management" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Tool Error Management<a href="#tool-error-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li><code>onToolError</code> callbacks log errors to <code>./tool_error.txt</code></li>
+<li>Graceful degradation for unavailable data sources</li>
+<li>Social media tools return &quot;unavailable&quot; status on errors</li>
+<li>Math services return &quot;N/A&quot; for calculation errors</li>
+</ul>
+<a id="navigation-error-recovery" class="tsd-anchor"></a><h4 class="tsd-anchor-link">Navigation Error Recovery<a href="#navigation-error-recovery" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>All consultant agents include <code>NavigateToTriageTool</code> for returning to the central router when:</p>
+<ul>
+<li>User mentions different cryptocurrencies</li>
+<li>Agent cannot handle specific requests</li>
+<li>Cross-agent navigation is required</li>
+</ul>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#agent-swarm-system"><span>Agent <wbr/>Swarm <wbr/>System</span></a><ul><li><a href="#purpose-and-scope"><span>Purpose and <wbr/>Scope</span></a></li><li><a href="#system-architecture"><span>System <wbr/>Architecture</span></a></li><li><ul><li><a href="#agent-swarm-architecture"><span>Agent <wbr/>Swarm <wbr/>Architecture</span></a></li></ul></li><li><a href="#agent-coordination-and-routing"><span>Agent <wbr/>Coordination and <wbr/>Routing</span></a></li><li><ul><li><a href="#central-coordination"><span>Central <wbr/>Coordination</span></a></li><li><a href="#triage-agent-implementation"><span>Triage <wbr/>Agent <wbr/>Implementation</span></a></li><li><ul><li><a href="#routing-logic"><span>Routing <wbr/>Logic</span></a></li></ul></li></ul></li><li><a href="#specialized-consultant-agents"><span>Specialized <wbr/>Consultant <wbr/>Agents</span></a></li><li><ul><li><a href="#common-architecture"><span>Common <wbr/>Architecture</span></a></li><li><a href="#dynamic-price-integration"><span>Dynamic <wbr/>Price <wbr/>Integration</span></a></li><li><a href="#agent-specific-implementation"><span>Agent-<wbr/>Specific <wbr/>Implementation</span></a></li></ul></li><li><a href="#tool-ecosystem"><span>Tool <wbr/>Ecosystem</span></a></li><li><ul><li><a href="#technical-analysis-tools"><span>Technical <wbr/>Analysis <wbr/>Tools</span></a></li><li><a href="#tool-integration-pattern"><span>Tool <wbr/>Integration <wbr/>Pattern</span></a></li></ul></li><li><a href="#ai-inference-system"><span>AI <wbr/>Inference <wbr/>System</span></a></li><li><ul><li><a href="#dynamic-model-selection"><span>Dynamic <wbr/>Model <wbr/>Selection</span></a></li><li><ul><li><a href="#available-ai-providers"><span>Available AI <wbr/>Providers</span></a></li><li><a href="#model-selection-architecture"><span>Model <wbr/>Selection <wbr/>Architecture</span></a></li><li><a href="#runtime-model-selection-logic"><span>Runtime <wbr/>Model <wbr/>Selection <wbr/>Logic</span></a></li></ul></li></ul></li><li><a href="#integration-with-trading-system"><span>Integration with <wbr/>Trading <wbr/>System</span></a></li><li><ul><li><a href="#agent-trading-system-bridge"><span>Agent-<wbr/>Trading <wbr/>System <wbr/>Bridge</span></a></li><li><ul><li><a href="#shared-service-dependencies"><span>Shared <wbr/>Service <wbr/>Dependencies</span></a></li></ul></li><li><a href="#error-handling-and-resilience"><span>Error <wbr/>Handling and <wbr/>Resilience</span></a></li><li><ul><li><a href="#tool-error-management"><span>Tool <wbr/>Error <wbr/>Management</span></a></li><li><a href="#navigation-error-recovery"><span>Navigation <wbr/>Error <wbr/>Recovery</span></a></li></ul></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

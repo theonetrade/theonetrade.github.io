@@ -1,0 +1,123 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/14_build_system_and_dependencies | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_14_build_system_and_dependencies.html">design/14_build_system_and_dependencies</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="build-system-and-dependencies" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Build System and Dependencies<a href="#build-system-and-dependencies" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the build system architecture, dependency management, and development workflow for the Signal trading system. The system uses Bun as the primary runtime and package manager, with Vite for frontend builds and Docker for containerized deployment.</p>
+<p>For Docker containerization and process management details, see <a href="design_13_docker_and_process_management.html">Docker and Process Management</a>. For environment configuration that affects build behavior, see <a href="design_12_environment_configuration.html">Environment Configuration</a>.</p>
+<a id="build-system-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Build System Architecture<a href="#build-system-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Signal trading system uses a modern JavaScript build toolchain centered around Bun as both the package manager and runtime environment. The build process supports both the main trading application and eight separate micro-frontend applications.</p>
+<a id="build-system-overview" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Build System Overview<a href="#build-system-overview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/14_Build_System_and_Dependencies_0.svg" alt="Mermaid Diagram"></p>
+<a id="dependency-management" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Dependency Management<a href="#dependency-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system uses Bun's native package management with lockfile-based dependency resolution to ensure reproducible builds across environments.</p>
+<p><img src="../media/14_Build_System_and_Dependencies_1.svg" alt="Mermaid Diagram"></p>
+<a id="build-artifacts-and-output-structure" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Build Artifacts and Output Structure<a href="#build-artifacts-and-output-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The build system generates artifacts in the <code>./build</code> directory, which contains both the compiled main application and the micro-frontend bundles. This directory is excluded from version control but included in Docker builds.</p>
+<a id="build-output-structure" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Build Output Structure<a href="#build-output-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Output Location</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main Application</td>
+<td><code>./build/index.cjs</code></td>
+<td>Compiled trading engine and API server</td>
+</tr>
+<tr>
+<td>Micro-Frontends</td>
+<td><code>./build/apps/</code></td>
+<td>Individual React application bundles</td>
+</tr>
+<tr>
+<td>Static Assets</td>
+<td><code>./build/public/</code></td>
+<td>CSS, images, and other static resources</td>
+</tr>
+<tr>
+<td>Type Definitions</td>
+<td><code>./build/types/</code></td>
+<td>Generated TypeScript declaration files</td>
+</tr>
+</tbody>
+</table>
+<a id="excluded-build-artifacts" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Excluded Build Artifacts<a href="#excluded-build-artifacts" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The build system excludes several categories of files and directories from both version control and Docker builds:</p>
+<p><img src="../media/14_Build_System_and_Dependencies_2.svg" alt="Mermaid Diagram"></p>
+<a id="development-workflow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Development Workflow<a href="#development-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The development workflow integrates TypeScript compilation, React component building, and dependency management through Bun's unified toolchain.</p>
+<a id="development-build-process" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Development Build Process<a href="#development-build-process" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/14_Build_System_and_Dependencies_3.svg" alt="Mermaid Diagram"></p>
+<a id="cache-and-temporary-files" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Cache and Temporary Files<a href="#cache-and-temporary-files" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The build system generates various cache and temporary files that are excluded from version control:</p>
+<table>
+<thead>
+<tr>
+<th>File Pattern</th>
+<th>Purpose</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*.tsbuildinfo</code></td>
+<td>TypeScript incremental build cache</td>
+<td>Project root</td>
+</tr>
+<tr>
+<td><code>.eslintcache</code></td>
+<td>ESLint linting cache</td>
+<td>Project root</td>
+</tr>
+<tr>
+<td><code>.cache</code></td>
+<td>General build cache</td>
+<td>Project root</td>
+</tr>
+<tr>
+<td><code>coverage/</code></td>
+<td>Test coverage reports</td>
+<td>Project root</td>
+</tr>
+<tr>
+<td><code>*.lcov</code></td>
+<td>Coverage data files</td>
+<td>Project root</td>
+</tr>
+</tbody>
+</table>
+<a id="docker-integration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Docker Integration<a href="#docker-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The build system integrates with Docker through a selective file inclusion strategy that excludes development files while including production artifacts.</p>
+<a id="docker-build-context" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Docker Build Context<a href="#docker-build-context" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/14_Build_System_and_Dependencies_4.svg" alt="Mermaid Diagram"></p>
+<p>The Docker build process copies the pre-built artifacts rather than rebuilding from source, optimizing build times and reducing container size.</p>
+<a id="log-and-debug-file-management" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Log and Debug File Management<a href="#log-and-debug-file-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The build and runtime system generates various log and debug files that are automatically excluded from version control and Docker builds:</p>
+<a id="generated-file-patterns" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Generated File Patterns<a href="#generated-file-patterns" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mastodon_news*.txt</code></td>
+<td>Social media data cache</td>
+</tr>
+<tr>
+<td><code>twitter_news*.txt</code></td>
+<td>Twitter feed cache</td>
+</tr>
+<tr>
+<td><code>debug*.txt</code></td>
+<td>Debug output files</td>
+</tr>
+<tr>
+<td><code>error.txt</code></td>
+<td>General error logs</td>
+</tr>
+<tr>
+<td><code>tool_error.txt</code></td>
+<td>Tool-specific error logs</td>
+</tr>
+<tr>
+<td><code>signal_error.txt</code></td>
+<td>Trading signal error logs</td>
+</tr>
+<tr>
+<td><code>invalid_signal.txt</code></td>
+<td>Invalid signal tracking</td>
+</tr>
+</tbody>
+</table>
+<p>These files are generated during runtime and development but are not part of the build artifacts or deployment package.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#build-system-and-dependencies"><span>Build <wbr/>System and <wbr/>Dependencies</span></a><ul><li><a href="#build-system-architecture"><span>Build <wbr/>System <wbr/>Architecture</span></a></li><li><ul><li><a href="#build-system-overview"><span>Build <wbr/>System <wbr/>Overview</span></a></li><li><a href="#dependency-management"><span>Dependency <wbr/>Management</span></a></li></ul></li><li><a href="#build-artifacts-and-output-structure"><span>Build <wbr/>Artifacts and <wbr/>Output <wbr/>Structure</span></a></li><li><ul><li><a href="#build-output-structure"><span>Build <wbr/>Output <wbr/>Structure</span></a></li><li><a href="#excluded-build-artifacts"><span>Excluded <wbr/>Build <wbr/>Artifacts</span></a></li></ul></li><li><a href="#development-workflow"><span>Development <wbr/>Workflow</span></a></li><li><ul><li><a href="#development-build-process"><span>Development <wbr/>Build <wbr/>Process</span></a></li><li><a href="#cache-and-temporary-files"><span>Cache and <wbr/>Temporary <wbr/>Files</span></a></li></ul></li><li><a href="#docker-integration"><span>Docker <wbr/>Integration</span></a></li><li><ul><li><a href="#docker-build-context"><span>Docker <wbr/>Build <wbr/>Context</span></a></li></ul></li><li><a href="#log-and-debug-file-management"><span>Log and <wbr/>Debug <wbr/>File <wbr/>Management</span></a></li><li><ul><li><a href="#generated-file-patterns"><span>Generated <wbr/>File <wbr/>Patterns</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/09_risk_assessment | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_09_risk_assessment.html">design/09_risk_assessment</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="risk-assessment" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Risk Assessment<a href="#risk-assessment" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><a id="purpose-and-scope" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Purpose and Scope<a href="#purpose-and-scope" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Risk Assessment system provides global market condition evaluation and trading strategy recommendations through the <code>RiskOutline</code> component. This system analyzes market volatility, cross-timeframe signal coherence, and risk/reward ratios to determine optimal trading approaches and block unfavorable market conditions.</p>
+<p>For information about position entry signal generation, see <a href="design_07_signal_generation_and_validation.html">Signal Generation and Validation</a>. For position management and closure decisions, see <a href="design_08_position_management_and_closing.html">Position Management and Closing</a>.</p>
+<a id="riskoutline-system-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">RiskOutline System Architecture<a href="#riskoutline-system-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Risk Assessment system operates as the safety layer in the three-stage AI decision pipeline, providing market condition analysis every 15 minutes to guide overall trading strategy selection.</p>
+<a id="core-components" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Core Components<a href="#core-components" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/09_Risk_Assessment_0.svg" alt="Mermaid Diagram"></p>
+<a id="risk-assessment-decision-structure" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Risk Assessment Decision Structure<a href="#risk-assessment-decision-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>RiskOutline</code> produces structured recommendations with detailed reasoning:</p>
+<p><img src="../media/09_Risk_Assessment_1.svg" alt="Mermaid Diagram"></p>
+<a id="strategy-recommendation-logic" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Strategy Recommendation Logic<a href="#strategy-recommendation-logic" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Risk Assessment system evaluates four distinct trading strategies based on market conditions and provides specific criteria for each approach.</p>
+<a id="fast_trade-strategy-criteria" class="tsd-anchor"></a><h3 class="tsd-anchor-link">FAST_TRADE Strategy Criteria<a href="#fast_trade-strategy-criteria" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system recommends fast scalping (15-minute trades) when market conditions support high-frequency entries:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Volatility</strong></td>
+<td>High volatility with clear impulsive movements</td>
+</tr>
+<tr>
+<td><strong>RSI/StochRSI</strong></td>
+<td>Clear signals on short periods without extreme values</td>
+</tr>
+<tr>
+<td><strong>Volume</strong></td>
+<td>Active volumes supporting impulsive movements</td>
+</tr>
+<tr>
+<td><strong>Momentum</strong></td>
+<td>Dynamic directional changes in momentum and slope</td>
+</tr>
+<tr>
+<td><strong>Overbought Levels</strong></td>
+<td>No excessive overbought conditions blocking movement</td>
+</tr>
+<tr>
+<td><strong>Technical Levels</strong></td>
+<td>Clean technical levels with quality breakouts</td>
+</tr>
+<tr>
+<td><strong>MACD</strong></td>
+<td>Clear signals without false crossovers</td>
+</tr>
+<tr>
+<td><strong>Intuition</strong></td>
+<td>Market context confirms short-term impulse</td>
+</tr>
+</tbody>
+</table>
+<a id="swing_trade-strategy-criteria" class="tsd-anchor"></a><h3 class="tsd-anchor-link">SWING_TRADE Strategy Criteria<a href="#swing_trade-strategy-criteria" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Medium-term swing trading (30-minute positions) is recommended for balanced market conditions:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Volatility</strong></td>
+<td>Balanced volatility with stable trends</td>
+</tr>
+<tr>
+<td><strong>MACD</strong></td>
+<td>Sustainable signals with minimal false crossovers</td>
+</tr>
+<tr>
+<td><strong>Fibonacci</strong></td>
+<td>Active Fibonacci levels as support/resistance</td>
+</tr>
+<tr>
+<td><strong>Volume</strong></td>
+<td>Even volume support without extreme spikes</td>
+</tr>
+<tr>
+<td><strong>Risk/Reward</strong></td>
+<td>More attractive R/R than fast trading</td>
+</tr>
+<tr>
+<td><strong>Indicator Extremes</strong></td>
+<td>Local indicator extremes make fast trading less effective</td>
+</tr>
+<tr>
+<td><strong>Trend Stability</strong></td>
+<td>Intuition indicates medium timeframe trend sustainability</td>
+</tr>
+</tbody>
+</table>
+<a id="position_trade-strategy-criteria" class="tsd-anchor"></a><h3 class="tsd-anchor-link">POSITION_TRADE Strategy Criteria<a href="#position_trade-strategy-criteria" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Long-term position trading (hourly trends) is optimal for established trend conditions:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Trend Formation</strong></td>
+<td>Established long-term trend with consistent movements</td>
+</tr>
+<tr>
+<td><strong>EMA Alignment</strong></td>
+<td>Proper EMA alignment actively supporting direction</td>
+</tr>
+<tr>
+<td><strong>Volatility</strong></td>
+<td>Moderate volatility creating stable long-term conditions</td>
+</tr>
+<tr>
+<td><strong>Indicator Consensus</strong></td>
+<td>Technical indicators show consistency on long-term periods</td>
+</tr>
+<tr>
+<td><strong>Short-term R/R</strong></td>
+<td>Short-term strategies show less attractive risk/profit</td>
+</tr>
+<tr>
+<td><strong>Trend Stability</strong></td>
+<td>Intuition confirms trend stability based on market context</td>
+</tr>
+</tbody>
+</table>
+<a id="wait-condition-criteria" class="tsd-anchor"></a><h3 class="tsd-anchor-link">WAIT Condition Criteria<a href="#wait-condition-criteria" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system recommends waiting when market conditions are unfavorable for all strategies:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Extreme Indicators</strong></td>
+<td>Indicators show extreme values on key timeframes</td>
+</tr>
+<tr>
+<td><strong>Signal Conflicts</strong></td>
+<td>Contradictory signals between different strategies</td>
+</tr>
+<tr>
+<td><strong>Volume Decline</strong></td>
+<td>Volume activity significantly reduced from normal</td>
+</tr>
+<tr>
+<td><strong>Divergences</strong></td>
+<td>Price-indicator divergences signaling reversal</td>
+</tr>
+<tr>
+<td><strong>Indecision Zones</strong></td>
+<td>Price in indecisive zone between important levels</td>
+</tr>
+<tr>
+<td><strong>False Breakout Risk</strong></td>
+<td>High probability of false breakouts and whipsaw movements</td>
+</tr>
+<tr>
+<td><strong>Poor R/R</strong></td>
+<td>All strategies show unfavorable risk/profit ratio</td>
+</tr>
+<tr>
+<td><strong>Market Uncertainty</strong></td>
+<td>Intuition suggests uncertainty or risks based on context</td>
+</tr>
+</tbody>
+</table>
+<a id="market-condition-analysis-framework" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Market Condition Analysis Framework<a href="#market-condition-analysis-framework" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Risk Assessment system employs comprehensive multi-dimensional analysis to evaluate market state and determine optimal trading strategies.</p>
+<a id="cross-timeframe-coherence-analysis" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Cross-Timeframe Coherence Analysis<a href="#cross-timeframe-coherence-analysis" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><a id="volatility-strategy-matching" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Volatility-Strategy Matching<a href="#volatility-strategy-matching" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system matches current market volatility characteristics to appropriate trading strategies:</p>
+<a id="integration-with-trading-pipeline" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Integration with Trading Pipeline<a href="#integration-with-trading-pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Risk Assessment system integrates with the broader trading pipeline through multiple validation and decision points.</p>
+<a id="risk-based-signal-filtering" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Risk-Based Signal Filtering<a href="#risk-based-signal-filtering" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/09_Risk_Assessment_4.svg" alt="Mermaid Diagram"></p>
+<a id="risk-condition-evaluation-process" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Risk Condition Evaluation Process<a href="#risk-condition-evaluation-process" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <code>RiskAutoService</code> evaluates market conditions and feeds recommendations into the trading pipeline:</p>
+<p><img src="../media/09_Risk_Assessment_5.svg" alt="Mermaid Diagram"></p>
+<a id="advanced-risk-analysis-features" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Advanced Risk Analysis Features<a href="#advanced-risk-analysis-features" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="intuitive-market-analysis" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Intuitive Market Analysis<a href="#intuitive-market-analysis" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The Risk Assessment system incorporates intuitive analysis beyond technical indicators to identify hidden market opportunities:</p>
+<table>
+<thead>
+<tr>
+<th>Analysis Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Price Anomalies</strong></td>
+<td>Unusual price movements not reflected in standard indicators</td>
+</tr>
+<tr>
+<td><strong>Volume Anomalies</strong></td>
+<td>Unexpected volume patterns indicating institutional activity</td>
+</tr>
+<tr>
+<td><strong>Indicator Divergences</strong></td>
+<td>Conflicts between price action and technical indicators</td>
+</tr>
+<tr>
+<td><strong>Market Context</strong></td>
+<td>Recent news, large player behavior, order book liquidity</td>
+</tr>
+<tr>
+<td><strong>Hidden Opportunities</strong></td>
+<td>Counter-indicator opportunities explained in reasoning</td>
+</tr>
+</tbody>
+</table>
+<a id="riskreward-optimization" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Risk/Reward Optimization<a href="#riskreward-optimization" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The system ensures minimum risk/reward ratios and evaluates comparative advantages:</p>
+<p><img src="../media/09_Risk_Assessment_6.svg" alt="Mermaid Diagram"></p>
+<a id="configuration-and-customization" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Configuration and Customization<a href="#configuration-and-customization" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><a id="risk-prompt-customization" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Risk Prompt Customization<a href="#risk-prompt-customization" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The Risk Assessment system uses a configurable prompt system allowing strategy criteria customization:</p>
+<p><img src="../media/09_Risk_Assessment_7.svg" alt="Mermaid Diagram"></p>
+<a id="feature-flag-integration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Feature Flag Integration<a href="#feature-flag-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Risk Assessment integrates with the feature flag system for granular behavior control:</p>
+<table>
+<thead>
+<tr>
+<th>Feature Flag</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Signal Risk Filter</strong></td>
+<td>Enable/disable risk-based signal blocking</td>
+</tr>
+<tr>
+<td><strong>Close Risk Filter</strong></td>
+<td>Bull market position holding logic</td>
+</tr>
+<tr>
+<td><strong>Wait Filter</strong></td>
+<td>Consolidation-based entry filtering</td>
+</tr>
+</tbody>
+</table>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#risk-assessment"><span>Risk <wbr/>Assessment</span></a><ul><li><a href="#purpose-and-scope"><span>Purpose and <wbr/>Scope</span></a></li><li><a href="#riskoutline-system-architecture"><span>Risk<wbr/>Outline <wbr/>System <wbr/>Architecture</span></a></li><li><ul><li><a href="#core-components"><span>Core <wbr/>Components</span></a></li><li><a href="#risk-assessment-decision-structure"><span>Risk <wbr/>Assessment <wbr/>Decision <wbr/>Structure</span></a></li></ul></li><li><a href="#strategy-recommendation-logic"><span>Strategy <wbr/>Recommendation <wbr/>Logic</span></a></li><li><ul><li><a href="#fast_trade-strategy-criteria"><span>FAST_<wbr/>TRADE <wbr/>Strategy <wbr/>Criteria</span></a></li><li><a href="#swing_trade-strategy-criteria"><span>SWING_<wbr/>TRADE <wbr/>Strategy <wbr/>Criteria</span></a></li><li><a href="#position_trade-strategy-criteria"><span>POSITION_<wbr/>TRADE <wbr/>Strategy <wbr/>Criteria</span></a></li><li><a href="#wait-condition-criteria"><span>WAIT <wbr/>Condition <wbr/>Criteria</span></a></li></ul></li><li><a href="#market-condition-analysis-framework"><span>Market <wbr/>Condition <wbr/>Analysis <wbr/>Framework</span></a></li><li><ul><li><a href="#cross-timeframe-coherence-analysis"><span>Cross-<wbr/>Timeframe <wbr/>Coherence <wbr/>Analysis</span></a></li><li><a href="#volatility-strategy-matching"><span>Volatility-<wbr/>Strategy <wbr/>Matching</span></a></li></ul></li><li><a href="#integration-with-trading-pipeline"><span>Integration with <wbr/>Trading <wbr/>Pipeline</span></a></li><li><ul><li><a href="#risk-based-signal-filtering"><span>Risk-<wbr/>Based <wbr/>Signal <wbr/>Filtering</span></a></li><li><a href="#risk-condition-evaluation-process"><span>Risk <wbr/>Condition <wbr/>Evaluation <wbr/>Process</span></a></li></ul></li><li><a href="#advanced-risk-analysis-features"><span>Advanced <wbr/>Risk <wbr/>Analysis <wbr/>Features</span></a></li><li><ul><li><a href="#intuitive-market-analysis"><span>Intuitive <wbr/>Market <wbr/>Analysis</span></a></li><li><a href="#riskreward-optimization"><span>Risk/<wbr/>Reward <wbr/>Optimization</span></a></li></ul></li><li><a href="#configuration-and-customization"><span>Configuration and <wbr/>Customization</span></a></li><li><ul><li><a href="#risk-prompt-customization"><span>Risk <wbr/>Prompt <wbr/>Customization</span></a></li><li><a href="#feature-flag-integration"><span>Feature <wbr/>Flag <wbr/>Integration</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

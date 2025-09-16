@@ -1,0 +1,153 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/03_ai_trading_engine | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_03_ai_trading_engine.html">design/03_ai_trading_engine</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="ai-trading-engine" class="tsd-anchor"></a><h1 class="tsd-anchor-link">AI Trading Engine<a href="#ai-trading-engine" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the core AI decision-making components of the Signal trading system, specifically the three-stage AI pipeline that drives all trading decisions. This includes the SignalOutline, CloseOutline, and RiskOutline services with their TTL (Time To Live) systems and decision logic.</p>
+<p>For information about the mathematical analysis services that feed data into these AI components, see <a href="design_04_mathematical_analysis_services.html">Mathematical Analysis Services</a>. For details about the agent swarm system used for user consultation, see <a href="design_05_agent_swarm_system.html">Agent Swarm System</a>.</p>
+<a id="three-stage-ai-decision-pipeline" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Three-Stage AI Decision Pipeline<a href="#three-stage-ai-decision-pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The AI Trading Engine employs a sophisticated three-stage pipeline that mimics professional trader thinking. Each stage operates independently with its own specialized AI prompts, TTL intervals, and decision logic.</p>
+<p><img src="../media/03_AI_Trading_Engine_0.svg" alt="Mermaid Diagram"></p>
+<a id="signal-outline---market-entry-analysis" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Signal Outline - Market Entry Analysis<a href="#signal-outline---market-entry-analysis" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The <code>SignalOutline</code> service determines whether to open LONG/SHORT positions or wait based on comprehensive market analysis across multiple timeframes.</p>
+<a id="decision-output-structure" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Decision Output Structure<a href="#decision-output-structure" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The SignalOutline produces structured decisions with the following format:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>action</code></td>
+<td><code>&quot;trade&quot; | &quot;wait&quot;</code></td>
+<td>Primary decision</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td><code>&quot;long&quot; | &quot;short&quot; | &quot;wait&quot;</code></td>
+<td>Position direction</td>
+</tr>
+<tr>
+<td><code>current_price</code></td>
+<td><code>number</code></td>
+<td>Market price at decision</td>
+</tr>
+<tr>
+<td><code>stop_loss_price</code></td>
+<td><code>number</code></td>
+<td>Risk management level</td>
+</tr>
+<tr>
+<td><code>take_profit_price</code></td>
+<td><code>number</code></td>
+<td>Profit target</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>Professional recommendation</td>
+</tr>
+<tr>
+<td><code>reasoning</code></td>
+<td><code>string</code></td>
+<td>Detailed technical justification</td>
+</tr>
+</tbody>
+</table>
+<a id="dynamic-ttl-system" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Dynamic TTL System<a href="#dynamic-ttl-system" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The SignalOutline employs a dynamic Time-To-Live system that adapts to market conditions:</p>
+<p><img src="../media/03_AI_Trading_Engine_1.svg" alt="Mermaid Diagram"></p>
+<a id="ai-prompt-strategy" class="tsd-anchor"></a><h3 class="tsd-anchor-link">AI Prompt Strategy<a href="#ai-prompt-strategy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The SignalOutline uses sophisticated prompts that emphasize:</p>
+<ul>
+<li><strong>Intuitive Market Analysis</strong>: Detection of hidden opportunities and anomalies</li>
+<li><strong>Multi-timeframe Coherence</strong>: Analysis across 1m/15m/30m/1h intervals</li>
+<li><strong>Historical P&amp;L Learning</strong>: Pattern recognition from previous trades</li>
+<li><strong>Strategy-Specific Logic</strong>: Separate decision trees for FAST_TRADE, SWING_TRADE, and POSITION_TRADE</li>
+</ul>
+<p>Key prompt sections include directional bias detection:</p>
+<pre><code><span class="hl-3">БЫСТРАЯ</span><span class="hl-1"> </span><span class="hl-3">ЛОНГ</span><span class="hl-1"> </span><span class="hl-2">ТОРГОВЛЯ</span><span class="hl-1"> (</span><span class="hl-4">15</span><span class="hl-1">-</span><span class="hl-0">минутные</span><span class="hl-1"> </span><span class="hl-0">покупки</span><span class="hl-1">) </span><span class="hl-0">подходит</span><span class="hl-1"> </span><span class="hl-5">когда</span><span class="hl-1">:</span><br/><span class="hl-1">- </span><span class="hl-0">Видишь</span><span class="hl-1"> </span><span class="hl-0">высокую</span><span class="hl-1"> </span><span class="hl-0">волатильность</span><span class="hl-1"> </span><span class="hl-0">и</span><span class="hl-1"> </span><span class="hl-0">четкие</span><span class="hl-1"> </span><span class="hl-0">импульсные</span><span class="hl-1"> </span><span class="hl-0">движения</span><span class="hl-1"> </span><span class="hl-3">ВВЕРХ</span><br/><span class="hl-1">- </span><span class="hl-3">RSI</span><span class="hl-1"> </span><span class="hl-0">и</span><span class="hl-1"> </span><span class="hl-0">StochRSI</span><span class="hl-1"> </span><span class="hl-0">дают</span><span class="hl-1"> </span><span class="hl-0">ясные</span><span class="hl-1"> </span><span class="hl-0">сигналы</span><span class="hl-1"> </span><span class="hl-0">на</span><span class="hl-1"> </span><span class="hl-0">покупку</span><span class="hl-1"> </span><span class="hl-0">на</span><span class="hl-1"> </span><span class="hl-0">коротких</span><span class="hl-1"> </span><span class="hl-0">периодах</span><br/><span class="hl-1">- </span><span class="hl-0">Объемы</span><span class="hl-1"> </span><span class="hl-0">взрываются</span><span class="hl-1"> </span><span class="hl-0">на</span><span class="hl-1"> </span><span class="hl-0">пробоях</span><span class="hl-1"> </span><span class="hl-0">уровней</span><span class="hl-1"> </span><span class="hl-0">сопротивления</span><span class="hl-1"> </span><span class="hl-3">ВВЕРХ</span>
+</code><button>Copy</button></pre>
+
+<a id="close-outline---position-management" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Close Outline - Position Management<a href="#close-outline---position-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The <code>CloseOutline</code> service specializes in scalping-oriented early position closure based on P&amp;L dynamics and reversal signal detection.</p>
+<a id="adaptive-ttl-based-on-pl-performance" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Adaptive TTL Based on P&amp;L Performance<a href="#adaptive-ttl-based-on-pl-performance" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The CloseOutline implements a sophisticated adaptive TTL system that responds to profit/loss momentum:</p>
+<table>
+<thead>
+<tr>
+<th>P&amp;L State</th>
+<th>TTL Duration</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PROFIT_RISING_TTL</strong></td>
+<td>2.5 minutes</td>
+<td>Profit growing, price rising - normal monitoring</td>
+</tr>
+<tr>
+<td><strong>PROFIT_FALLING_TTL</strong></td>
+<td>1.0 minutes</td>
+<td>Profit declining, fast check for reversal</td>
+</tr>
+<tr>
+<td><strong>LOSS_RISING_TTL</strong></td>
+<td>5.0 minutes</td>
+<td>Loss shrinking, slow check for recovery</td>
+</tr>
+<tr>
+<td><strong>LOSS_FALLING_TTL</strong></td>
+<td>5.0 minutes</td>
+<td>Loss growing, slow check to avoid panic</td>
+</tr>
+</tbody>
+</table>
+<a id="decision-logic-framework" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Decision Logic Framework<a href="#decision-logic-framework" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The CloseOutline employs professional trader intuition with specific criteria:</p>
+<p><strong>HOLD Position</strong> when:</p>
+<ul>
+<li>P&amp;L demonstrates STABLE or ASCENDING growth</li>
+<li>Volatility remains NORMAL (fluctuations up to 0.2%)</li>
+<li>Position progresses toward Take Profit naturally</li>
+<li>INDICATORS SHOW trend continuation across most timeframes</li>
+</ul>
+<p><strong>CLOSE Position</strong> when:</p>
+<ul>
+<li>Impulse CONSISTENTLY FALLS for more than 15 minutes</li>
+<li>Volatility becomes EXCESSIVELY HIGH (more than 0.3% from peak)</li>
+<li>P&amp;L shows SUSTAINED LOSS (more than 0.3%) without recovery signs</li>
+<li>INDICATORS SHOW CLEAR trend reversal consistently over 15 minutes</li>
+</ul>
+<a id="real-world-decision-example" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Real-World Decision Example<a href="#real-world-decision-example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The close.json file demonstrates an actual AI decision where the system chose to close a position:</p>
+<pre><code class="json"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-12">&quot;action&quot;</span><span class="hl-1">: </span><span class="hl-6">&quot;close&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-12">&quot;description&quot;</span><span class="hl-1">: </span><span class="hl-6">&quot;ЗАКРЫТЬ ПОЗИЦИЮ — P&amp;L показывает слабый импульс и потерю первоначального прогресса&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-12">&quot;reasoning&quot;</span><span class="hl-1">: </span><span class="hl-6">&quot;Текущий P&amp;L демонстрирует слабый импульс — достиг пика +0.10% но откатился до +0.05%...&quot;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<a id="risk-outline---market-condition-assessment" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Risk Outline - Market Condition Assessment<a href="#risk-outline---market-condition-assessment" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The <code>RiskOutline</code> service performs global safety assessment of trading conditions and recommends optimal trading strategies.</p>
+<a id="strategy-recommendation-engine" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Strategy Recommendation Engine<a href="#strategy-recommendation-engine" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/03_AI_Trading_Engine_2.svg" alt="Mermaid Diagram"></p>
+<a id="intuitive-market-analysis-integration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Intuitive Market Analysis Integration<a href="#intuitive-market-analysis-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The RiskOutline incorporates intuitive analysis capabilities:</p>
+<ul>
+<li><strong>Hidden Opportunity Detection</strong>: Identifies potential entry points not reflected in obvious indicator signals</li>
+<li><strong>Anomaly Recognition</strong>: Monitors price movement, volume, and indicator behavior anomalies</li>
+<li><strong>Market Context Awareness</strong>: Considers recent news, large player behavior, and order book liquidity</li>
+</ul>
+<pre><code><span class="hl-3">ИНТУИТИВНЫЙ</span><span class="hl-1"> </span><span class="hl-3">АНАЛИЗ</span><span class="hl-1"> </span><span class="hl-5">РЫНКА</span><span class="hl-1">:</span><br/><span class="hl-1">- </span><span class="hl-0">Используй</span><span class="hl-1"> </span><span class="hl-0">интуицию</span><span class="hl-1"> </span><span class="hl-0">для</span><span class="hl-1"> </span><span class="hl-0">выявления</span><span class="hl-1"> </span><span class="hl-0">скрытых</span><span class="hl-1"> </span><span class="hl-0">рыночных</span><span class="hl-1"> </span><span class="hl-0">возможностей</span><br/><span class="hl-1">- </span><span class="hl-0">Обращай</span><span class="hl-1"> </span><span class="hl-0">внимание</span><span class="hl-1"> </span><span class="hl-0">на</span><span class="hl-1"> </span><span class="hl-0">аномалии</span><span class="hl-1"> </span><span class="hl-0">в</span><span class="hl-1"> </span><span class="hl-0">движении</span><span class="hl-1"> </span><span class="hl-0">цены</span><span class="hl-1">, </span><span class="hl-0">объемах</span><span class="hl-1"> </span><span class="hl-0">или</span><span class="hl-1"> </span><span class="hl-0">поведении</span><span class="hl-1"> </span><span class="hl-0">индикаторов</span><br/><span class="hl-1">- </span><span class="hl-0">Учитывай</span><span class="hl-1"> </span><span class="hl-0">рыночный</span><span class="hl-1"> </span><span class="hl-5">контекст</span><span class="hl-1">: </span><span class="hl-0">недавние</span><span class="hl-1"> </span><span class="hl-0">новости</span><span class="hl-1">, </span><span class="hl-0">поведение</span><span class="hl-1"> </span><span class="hl-0">крупных</span><span class="hl-1"> </span><span class="hl-0">игроков</span>
+</code><button>Copy</button></pre>
+
+<a id="prompt-system-architecture" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Prompt System Architecture<a href="#prompt-system-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The AI Trading Engine uses a sophisticated configurable prompt system with override capabilities and fallback mechanisms.</p>
+<p><img src="../media/03_AI_Trading_Engine_3.svg" alt="Mermaid Diagram"></p>
+<a id="prompt-service-implementation-pattern" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Prompt Service Implementation Pattern<a href="#prompt-service-implementation-pattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each prompt service follows a consistent singleshot caching pattern:</p>
+<pre><code class="typescript"><span class="hl-8">export</span><span class="hl-1"> </span><span class="hl-9">class</span><span class="hl-1"> </span><span class="hl-10">SignalPromptService</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-9">private</span><span class="hl-1"> </span><span class="hl-0">getPrompt</span><span class="hl-1"> = </span><span class="hl-2">singleshot</span><span class="hl-1">(</span><span class="hl-9">async</span><span class="hl-1"> (): </span><span class="hl-10">Promise</span><span class="hl-1">&lt;</span><span class="hl-10">PromptModel</span><span class="hl-1">&gt; </span><span class="hl-9">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-9">const</span><span class="hl-1"> </span><span class="hl-3">customPath</span><span class="hl-1"> = </span><span class="hl-0">require</span><span class="hl-1">.</span><span class="hl-2">resolve</span><span class="hl-1">(</span><span class="hl-6">&#39;./config/signal.prompt.cjs&#39;</span><span class="hl-1">);</span><br/><span class="hl-1">        </span><span class="hl-8">if</span><span class="hl-1"> (</span><span class="hl-8">await</span><span class="hl-1"> </span><span class="hl-2">exists</span><span class="hl-1">(</span><span class="hl-0">customPath</span><span class="hl-1">)) {</span><br/><span class="hl-1">            </span><span class="hl-8">return</span><span class="hl-1"> </span><span class="hl-2">require</span><span class="hl-1">(</span><span class="hl-0">customPath</span><span class="hl-1">);  </span><span class="hl-7">// Custom override</span><br/><span class="hl-1">        }</span><br/><span class="hl-1">        </span><span class="hl-8">return</span><span class="hl-1"> </span><span class="hl-0">signal_prompt_default</span><span class="hl-1">;    </span><span class="hl-7">// Default fallback</span><br/><span class="hl-1">    });</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>This architecture provides:</p>
+<ul>
+<li><strong>Separation of Concerns</strong>: Prompts isolated from business logic</li>
+<li><strong>Hot-swappable Updates</strong>: Zero-downtime prompt modifications</li>
+<li><strong>Type Safety</strong>: TypeScript structure integrity guarantees</li>
+<li><strong>Performance Optimization</strong>: Singleshot caching with lazy loading</li>
+</ul>
+<a id="ai-completion-integration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">AI Completion Integration<a href="#ai-completion-integration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The AI Trading Engine integrates with multiple AI providers through the <code>InferenceMetaService</code> for model selection and completion processing.</p>
+<a id="multi-provider-architecture" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Multi-Provider Architecture<a href="#multi-provider-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/03_AI_Trading_Engine_4.svg" alt="Mermaid Diagram"></p>
+<a id="decision-output-processing" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Decision Output Processing<a href="#decision-output-processing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Each AI completion goes through structured processing:</p>
+<ol>
+<li><strong>Prompt Assembly</strong>: System + user prompts with market data</li>
+<li><strong>AI Completion</strong>: Multi-provider inference with model selection</li>
+<li><strong>JSON Parsing</strong>: Structured decision extraction</li>
+<li><strong>Validation</strong>: Business rule compliance checking</li>
+<li><strong>TTL Assignment</strong>: Dynamic interval calculation for next execution</li>
+</ol>
+<p>The system ensures robust error handling and graceful degradation when AI services are unavailable.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#ai-trading-engine"><span>AI <wbr/>Trading <wbr/>Engine</span></a><ul><li><a href="#three-stage-ai-decision-pipeline"><span>Three-<wbr/>Stage AI <wbr/>Decision <wbr/>Pipeline</span></a></li><li><a href="#signal-outline---market-entry-analysis"><span>Signal <wbr/>Outline -<wbr/> <wbr/>Market <wbr/>Entry <wbr/>Analysis</span></a></li><li><ul><li><a href="#decision-output-structure"><span>Decision <wbr/>Output <wbr/>Structure</span></a></li><li><a href="#dynamic-ttl-system"><span>Dynamic TTL <wbr/>System</span></a></li><li><a href="#ai-prompt-strategy"><span>AI <wbr/>Prompt <wbr/>Strategy</span></a></li></ul></li><li><a href="#close-outline---position-management"><span>Close <wbr/>Outline -<wbr/> <wbr/>Position <wbr/>Management</span></a></li><li><ul><li><a href="#adaptive-ttl-based-on-pl-performance"><span>Adaptive TTL <wbr/>Based on <wbr/>P&amp;<wbr/>L <wbr/>Performance</span></a></li><li><a href="#decision-logic-framework"><span>Decision <wbr/>Logic <wbr/>Framework</span></a></li><li><a href="#real-world-decision-example"><span>Real-<wbr/>World <wbr/>Decision <wbr/>Example</span></a></li></ul></li><li><a href="#risk-outline---market-condition-assessment"><span>Risk <wbr/>Outline -<wbr/> <wbr/>Market <wbr/>Condition <wbr/>Assessment</span></a></li><li><ul><li><a href="#strategy-recommendation-engine"><span>Strategy <wbr/>Recommendation <wbr/>Engine</span></a></li><li><a href="#intuitive-market-analysis-integration"><span>Intuitive <wbr/>Market <wbr/>Analysis <wbr/>Integration</span></a></li></ul></li><li><a href="#prompt-system-architecture"><span>Prompt <wbr/>System <wbr/>Architecture</span></a></li><li><ul><li><a href="#prompt-service-implementation-pattern"><span>Prompt <wbr/>Service <wbr/>Implementation <wbr/>Pattern</span></a></li></ul></li><li><a href="#ai-completion-integration"><span>AI <wbr/>Completion <wbr/>Integration</span></a></li><li><ul><li><a href="#multi-provider-architecture"><span>Multi-<wbr/>Provider <wbr/>Architecture</span></a></li><li><a href="#decision-output-processing"><span>Decision <wbr/>Output <wbr/>Processing</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

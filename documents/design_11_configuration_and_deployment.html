@@ -1,0 +1,116 @@
+<!DOCTYPE html><html class="default" lang="en" data-base=".."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>design/11_configuration_and_deployment | tradegpt-signals</title><meta name="description" content="Documentation for tradegpt-signals"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="../index.html" class="title">tradegpt-signals</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb"><li><a href="../modules.html">tradegpt-signals</a></li><li><a href="design_11_configuration_and_deployment.html">design/11_configuration_and_deployment</a></li></ul></div><div class="tsd-panel tsd-typography"><a id="configuration-and-deployment" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Configuration and Deployment<a href="#configuration-and-deployment" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1><p>This document covers the configuration, containerization, and deployment aspects of the Signal trading system. It provides comprehensive guidance on setting up environment variables, Docker containers, and production process management using PM2.</p>
+<p>For information about the mathematical analysis services and their runtime behavior, see <a href="#2">System Architecture</a>. For details about agent system configuration and behavior controls, see <a href="#5">Agent System Reference</a>.</p>
+<a id="environment-configuration" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Environment Configuration<a href="#environment-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The Signal system uses extensive environment-based configuration through 67+ variables defined in <a href="">.env.example:1-89</a>. These variables control all aspects of system behavior including database connections, API integrations, trading features, and agent capabilities.</p>
+<a id="configuration-categories" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Configuration Categories<a href="#configuration-categories" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The environment variables are organized into logical groups:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Variables</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database</td>
+<td><code>CC_MONGO_CONNECTION_STRING</code>, <code>CC_REDIS_HOST</code>, <code>CC_REDIS_PORT</code>, <code>CC_REDIS_USER</code>, <code>CC_REDIS_PASSWORD</code></td>
+<td>MongoDB and Redis connection parameters</td>
+</tr>
+<tr>
+<td>AI APIs</td>
+<td><code>CC_OPENAI_API_KEY</code>, <code>CC_CLAUDE_API_KEY</code>, <code>CC_GROK_API_KEY</code>, <code>CC_HF_API_KEY</code>, <code>CC_OLLAMA_API_KEY</code>, <code>CC_DEEPSEEK_API_KEY</code>, <code>CC_MISTRAL_API_KEY</code>, <code>CC_PERPLEXITY_API_KEY</code>, <code>CC_COHERE_API_KEY</code>, <code>CC_ALIBABA_API_KEY</code></td>
+<td>Authentication keys for various AI inference providers</td>
+</tr>
+<tr>
+<td>Social Media</td>
+<td><code>CC_MASTODON_INSTANCE</code>, <code>CC_MASTODON_ACCESS_TOKEN</code>, <code>CC_TELEGRAM_BOT</code>, <code>CC_TELEGRAM_TOKEN</code>, <code>CC_TELEGRAM_CHANNEL</code></td>
+<td>Social media platform integrations</td>
+</tr>
+<tr>
+<td>Trading Control</td>
+<td><code>CC_ENABLE_TRADE</code>, <code>CC_ENABLE_BTCUSDT</code>, <code>CC_ENABLE_ETHUSDT</code>, <code>CC_ENABLE_BNBUSDT</code>, <code>CC_ENABLE_XRPUSDT</code>, <code>CC_ENABLE_SOLUSDT</code></td>
+<td>Trading feature flags and supported pairs</td>
+</tr>
+<tr>
+<td>Ladder Trading</td>
+<td><code>CC_LADDER_LOWER_STEP</code>, <code>CC_LADDER_UPPER_STEP</code>, <code>CC_LADDER_BUY_USDT</code>, <code>CC_LADDER_COMMISSION</code></td>
+<td>DCA ladder configuration parameters</td>
+</tr>
+<tr>
+<td>Chat Features</td>
+<td><code>CC_CHAT_ENABLE_LONG_SIGNALS</code>, <code>CC_CHAT_ENABLE_SHORT_SIGNALS</code>, <code>CC_CHAT_ENABLE_SWING_SIGNALS</code>, <code>CC_CHAT_ENABLE_MASTODON_NEWS</code>, <code>CC_CHAT_ENABLE_TWITTER_NEWS</code>, <code>CC_CHAT_ENABLE_VOLUME_DATA</code>, <code>CC_CHAT_ENABLE_PRICE_DATA</code>, <code>CC_CHAT_ENABLE_SLOPE_DATA</code>, <code>CC_CHAT_ENABLE_WHALE_DATA</code></td>
+<td>Agent system tool availability controls</td>
+</tr>
+</tbody>
+</table>
+<a id="configuration-management-flow" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Configuration Management Flow<a href="#configuration-management-flow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/11_Configuration_and_Deployment_0.svg" alt="Mermaid Diagram"></p>
+<a id="docker-containerization" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Docker Containerization<a href="#docker-containerization" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The system uses Docker for consistent deployment across environments. The containerization approach leverages Bun runtime for optimal performance and reduced container size.</p>
+<a id="container-architecture" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Container Architecture<a href="#container-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/11_Configuration_and_Deployment_1.svg" alt="Mermaid Diagram"></p>
+<a id="container-build-process" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Container Build Process<a href="#container-build-process" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>The <a href="">Dockerfile:1-16</a> implements a multi-stage approach:</p>
+<ol>
+<li><strong>Base Image</strong>: Uses <code>oven/bun:1.2.19-alpine</code> for minimal footprint</li>
+<li><strong>System Dependencies</strong>: Installs <code>curl</code> for health checks</li>
+<li><strong>Application Files</strong>: Copies pre-built artifacts, assets, and configuration</li>
+<li><strong>Runtime Dependencies</strong>: Installs Node.js dependencies via <code>bun install</code></li>
+<li><strong>Entry Point</strong>: Executes <code>index.cjs</code> as the main application</li>
+</ol>
+<a id="process-management" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Process Management<a href="#process-management" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Production deployment uses PM2 for process management, providing automatic restarts, logging, and monitoring capabilities. The system runs two primary processes with distinct responsibilities.</p>
+<a id="pm2-configuration" class="tsd-anchor"></a><h3 class="tsd-anchor-link">PM2 Configuration<a href="#pm2-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/11_Configuration_and_Deployment_2.svg" alt="Mermaid Diagram"></p>
+<a id="process-configuration-details" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Process Configuration Details<a href="#process-configuration-details" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Both processes share common PM2 configuration patterns defined in <a href="">config/ecosystem.config.js:19-51</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exec_mode</code></td>
+<td><code>&quot;fork&quot;</code></td>
+<td>Single instance per process</td>
+</tr>
+<tr>
+<td><code>instances</code></td>
+<td><code>&quot;1&quot;</code></td>
+<td>One instance per application</td>
+</tr>
+<tr>
+<td><code>autorestart</code></td>
+<td><code>true</code></td>
+<td>Automatic restart on crashes</td>
+</tr>
+<tr>
+<td><code>cron_restart</code></td>
+<td><code>&quot;0 0 * * *&quot;</code></td>
+<td>Daily restart at midnight</td>
+</tr>
+<tr>
+<td><code>max_memory_restart</code></td>
+<td><code>&quot;4096M&quot;</code></td>
+<td>Restart when memory exceeds 4GB</td>
+</tr>
+<tr>
+<td><code>interpreter</code></td>
+<td><code>~/.bun/bin/bun</code></td>
+<td>Bun runtime for execution</td>
+</tr>
+<tr>
+<td><code>merge_logs</code></td>
+<td><code>true</code></td>
+<td>Combine stdout and stderr</td>
+</tr>
+</tbody>
+</table>
+<a id="build-and-deployment-workflow" class="tsd-anchor"></a><h2 class="tsd-anchor-link">Build and Deployment Workflow<a href="#build-and-deployment-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2><p>The deployment process follows a structured approach from source code to running containers, with clear separation between build artifacts and runtime dependencies.</p>
+<a id="deployment-pipeline" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Deployment Pipeline<a href="#deployment-pipeline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><p><img src="../media/11_Configuration_and_Deployment_3.svg" alt="Mermaid Diagram"></p>
+<a id="key-deployment-considerations" class="tsd-anchor"></a><h3 class="tsd-anchor-link">Key Deployment Considerations<a href="#key-deployment-considerations" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><ol>
+<li><strong>Build Dependencies</strong>: The build process requires Bun runtime and development dependencies</li>
+<li><strong>Runtime Dependencies</strong>: Production containers only need runtime dependencies via <code>bun install --ignore-scripts</code></li>
+<li><strong>Process Separation</strong>: Main application and Binance tool run as separate PM2 processes</li>
+<li><strong>Log Management</strong>: Centralized logging to <code>./logs/pm2/</code> directory with date formatting</li>
+<li><strong>Memory Management</strong>: 4GB memory limits with automatic restart policies</li>
+<li><strong>Health Monitoring</strong>: Daily cron restarts ensure system stability</li>
+</ol>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#configuration-and-deployment"><span>Configuration and <wbr/>Deployment</span></a><ul><li><a href="#environment-configuration"><span>Environment <wbr/>Configuration</span></a></li><li><ul><li><a href="#configuration-categories"><span>Configuration <wbr/>Categories</span></a></li><li><a href="#configuration-management-flow"><span>Configuration <wbr/>Management <wbr/>Flow</span></a></li></ul></li><li><a href="#docker-containerization"><span>Docker <wbr/>Containerization</span></a></li><li><ul><li><a href="#container-architecture"><span>Container <wbr/>Architecture</span></a></li><li><a href="#container-build-process"><span>Container <wbr/>Build <wbr/>Process</span></a></li></ul></li><li><a href="#process-management"><span>Process <wbr/>Management</span></a></li><li><ul><li><a href="#pm2-configuration"><span>PM2 <wbr/>Configuration</span></a></li><li><a href="#process-configuration-details"><span>Process <wbr/>Configuration <wbr/>Details</span></a></li></ul></li><li><a href="#build-and-deployment-workflow"><span>Build and <wbr/>Deployment <wbr/>Workflow</span></a></li><li><ul><li><a href="#deployment-pipeline"><span>Deployment <wbr/>Pipeline</span></a></li><li><a href="#key-deployment-considerations"><span>Key <wbr/>Deployment <wbr/>Considerations</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">tradegpt-signals</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
